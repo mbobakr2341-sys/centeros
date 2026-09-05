@@ -971,6 +971,15 @@ function PublicSite() {
 
           <div className="footer-contact">
             <small>تواصل معنا</small>
+
+            <a
+              className="whatsapp-button"
+              href="https://wa.me/201109330703"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              تواصل عبر واتساب
+            </a>
             <strong>centeros@centeros.online</strong>
           </div>
         </div>
