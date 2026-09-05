@@ -856,8 +856,27 @@ function PublicSite() {
                     throw new Error("Booking request failed");
                   }
 
+                  const whatsappMessage = `
+طلب حجز جديد - CenterOS
+
+اسم المسؤول: ${data.ManagerName}
+اسم المركز: ${data.CenterName}
+البريد: ${data.Email}
+عدد الفروع: ${data.Branches}
+عدد الطلاب: ${data.ExpectedStudents}
+
+${data.AdditionalInfo ? "معلومات إضافية: " + data.AdditionalInfo : ""}
+`;
+
+                  const whatsappUrl =
+                    "https://wa.me/201109330703?text=" +
+                    encodeURIComponent(whatsappMessage);
+
                   form.reset();
-                  alert("تم إرسال طلبك بنجاح. سيتم التواصل معك قريبًا.");
+
+                  alert("تم إرسال طلبك بنجاح. سيتم فتح واتساب للتأكيد.");
+
+                  window.open(whatsappUrl, "_blank");
                 } catch (error) {
                   console.error("Booking error:", error);
 
