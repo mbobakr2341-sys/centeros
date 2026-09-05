@@ -603,6 +603,19 @@ function PublicSite() {
                   تواصل عبر واتساب
                 </a>
 
+                <a
+                  className="whatsapp-button"
+                  href="https://wa.me/201109330703"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {isArabic
+                    ? "تواصل عبر واتساب"
+                    : language === "tr"
+                    ? "WhatsApp ile iletişim"
+                    : "Contact WhatsApp"}
+                </a>
+
                 <button
                   className="secondary-button"
                   onClick={() => scrollTo("features")}
