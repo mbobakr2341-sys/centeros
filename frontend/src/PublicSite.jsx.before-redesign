@@ -1,0 +1,757 @@
+import { useState } from "react";
+import "./PublicSite.css";
+
+const translations = {
+  ar: {
+    dir: "rtl",
+    nav: {
+      home: "الرئيسية",
+      features: "المميزات",
+      pricing: "الأسعار",
+      about: "عن النظام",
+      contact: "تواصل معنا",
+    },
+    cta: "احجز مكانك الآن",
+    hero: {
+      eyebrow: "centerOS",
+      title: "منصة إدارة متكاملة للأكاديميات",
+      text: "كل ما تحتاجه لإدارة الطلاب، المعلمين، الدروس، الحضور، المدفوعات والتقارير في منصة سهلة وآمنة.",
+      primary: "احجز مكانك الآن",
+      secondary: "اكتشف المميزات",
+    },
+    dashboard: {
+      title: "لوحة تحكم CenterOS",
+      subtitle: "إدارة أكاديميتك من مكان واحد",
+      students: "الطلاب",
+      teachers: "المعلمين",
+      courses: "الدورات",
+      attendance: "الحضور",
+      revenue: "المدفوعات",
+      activity: "آخر النشاطات",
+    },
+    features: {
+      eyebrow: "لماذا CenterOS؟",
+      title: "كل أدوات الإدارة التي تحتاجها",
+      text: "صممنا CenterOS ليجمع العمليات اليومية للأكاديمية في نظام واحد واضح وسهل الاستخدام.",
+      items: [
+        ["إدارة الطلاب", "ملفات الطلاب، الحالات، البحث، الفلترة وإدارة بياناتهم بسهولة."],
+        ["إدارة المعلمين", "إدارة المعلمين والصلاحيات والبيانات والمهام من مكان واحد."],
+        ["الدروس والجداول", "نظّم الدروس، المواعيد، الفصول والقاعات بدون تعقيد."],
+        ["الحضور", "سجّل الحضور والغياب والتأخير وتابع تاريخ حضور الطلاب."],
+        ["المدفوعات", "تابع المدفوعات والمبالغ المتبقية ومواعيد الاستحقاق."],
+        ["التقارير", "احصل على رؤية واضحة لأداء الطلاب والحضور والدورات والمدفوعات."],
+      ],
+    },
+    pricing: {
+      eyebrow: "الأسعار",
+      title: "اختر الخطة المناسبة لأكاديميتك",
+      text: "خطط واضحة تبدأ من الاحتياجات الأساسية وتصل إلى الحلول المتقدمة للمؤسسات الكبيرة.",
+      monthly: "شهري",
+      plans: [
+        {
+          name: "Starter",
+          price: "$100",
+          desc: "للأكاديميات والمراكز الصغيرة.",
+          limits: ["حتى 200 طالب", "حتى 10 معلمين", "حتى 15 دورة", "فرع واحد", "حتى 5 مستخدمين إداريين"],
+          features: ["إدارة الطلاب", "إدارة المعلمين", "إدارة الدورات والدروس", "الجداول والقاعات", "الحضور", "المدفوعات", "الإشعارات الأساسية", "التقارير الأساسية", "Email Support", "Help Center"],
+        },
+        {
+          name: "Business",
+          price: "$120",
+          popular: true,
+          desc: "للأكاديميات التي تحتاج إدارة وتحليلات متقدمة.",
+          limits: ["حتى 500 طالب", "حتى 30 معلمًا", "دورات غير محدودة", "فرع واحد", "حتى 15 مستخدمًا إداريًا"],
+          features: ["كل ما في Starter", "صلاحيات متقدمة", "Custom Roles", "سجل النشاطات", "Bulk Actions", "تقارير حضور متقدمة", "تقارير مالية متقدمة", "تحليلات الطلاب", "تحليلات الحضور", "تحليلات الإيرادات", "إشعارات مستهدفة", "Priority Support"],
+        },
+        {
+          name: "Professional",
+          price: "$170",
+          desc: "للأكاديميات متعددة الفروع والمؤسسات المتقدمة.",
+          limits: ["حتى 1,500 طالب", "معلمون غير محدودين", "دورات غير محدودة", "حتى 3 فروع", "مستخدمون إداريون غير محدودين"],
+          features: ["كل ما في Business", "إدارة متعددة الفروع", "Branch Managers", "تقارير لكل فرع", "مقارنة أداء الفروع", "تحليلات متقدمة", "تقارير قابلة للتخصيص", "صلاحيات على مستوى الفرع", "API Access", "تخصيص الهوية والشعار", "Onboarding Assistance"],
+        },
+        {
+          name: "Enterprise",
+          custom: true,
+          price: "Custom",
+          desc: "للمؤسسات والأكاديميات الكبيرة.",
+          limits: ["عدد طلاب حسب الاحتياج", "فروع متعددة حسب العقد", "بنية تحتية مخصصة عند الحاجة"],
+          features: ["White Label", "Custom Domain", "Custom Apps", "Custom Workflows", "Integrations", "Advanced API", "Custom Reports", "Custom Permissions", "Data Migration", "Employee Training", "Dedicated Support", "SLA"],
+        },
+      ],
+      note: "White Label وملكية الكود أو الحصرية شروط تعاقدية منفصلة وليست جزءًا تلقائيًا من اشتراك Enterprise.",
+    },
+    about: {
+      eyebrow: "عن CenterOS",
+      title: "نظام واحد لإدارة أكاديميتك بالكامل",
+      text: "CenterOS هو نظام إدارة مصمم للأكاديميات والمراكز التعليمية والتدريبية التي تريد تنظيم عملياتها اليومية، تقليل العمل اليدوي، والحصول على رؤية أوضح لأداء المؤسسة.",
+      points: [
+        "واجهة واضحة وسهلة الاستخدام",
+        "إدارة مركزية للطلاب والمعلمين والدورات",
+        "الحضور والمدفوعات والتقارير في مكان واحد",
+        "دعم الأكاديميات متعددة الفروع في الخطط المتقدمة",
+        "بنية آمنة وقابلة للتوسع",
+      ],
+    },
+    contact: {
+      eyebrow: "ابدأ مع CenterOS",
+      title: "هل تريد إدارة أكاديميتك بشكل أفضل؟",
+      text: "أرسل لنا بيانات الأكاديمية وسنتواصل معك لمناقشة احتياجاتك والخطة المناسبة.",
+      manager: "اسم المسؤول",
+      academy: "اسم المركز / الأكاديمية",
+      email: "البريد الإلكتروني",
+      branches: "عدد الفروع",
+      students: "عدد الطلاب المتوقع",
+      info: "معلومات إضافية",
+      submit: "إرسال طلب الحجز",
+      privacy: "لن نعرض أرقام التواصل الداخلية أو بيانات الطلبات على الموقع.",
+    },
+    footer: {
+      description: "منصة إدارة متكاملة للأكاديميات والمراكز التعليمية.",
+      email: "centeros@centeros.online",
+      rights: "جميع الحقوق محفوظة.",
+    },
+  },
+
+  en: {
+    dir: "ltr",
+    nav: {
+      home: "Home",
+      features: "Features",
+      pricing: "Pricing",
+      about: "About",
+      contact: "Contact",
+    },
+    cta: "Book Now",
+    hero: {
+      eyebrow: "centerOS",
+      title: "Complete Management Platform for Academies",
+      text: "Everything you need to manage students, teachers, classes, attendance, payments and reports in one simple and secure platform.",
+      primary: "Book Now",
+      secondary: "Explore Features",
+    },
+    dashboard: {
+      title: "CenterOS Dashboard",
+      subtitle: "Manage your academy from one place",
+      students: "Students",
+      teachers: "Teachers",
+      courses: "Courses",
+      attendance: "Attendance",
+      revenue: "Payments",
+      activity: "Recent Activity",
+    },
+    features: {
+      eyebrow: "Why CenterOS?",
+      title: "Everything you need to run your academy",
+      text: "CenterOS brings the daily operations of your academy together in one clear and easy-to-use system.",
+      items: [
+        ["Student Management", "Manage student profiles, statuses, search and filtering with ease."],
+        ["Teacher Management", "Manage teachers, permissions, data and responsibilities from one place."],
+        ["Classes & Scheduling", "Organize classes, schedules, rooms and sessions without complexity."],
+        ["Attendance", "Track attendance, absence, lateness and student attendance history."],
+        ["Payments", "Track payments, remaining balances and due dates."],
+        ["Reports", "Get a clear view of students, attendance, courses and payments."],
+      ],
+    },
+    pricing: {
+      eyebrow: "Pricing",
+      title: "Choose the plan that fits your academy",
+      text: "Clear plans covering essential operations through advanced institutional management.",
+      monthly: "Monthly",
+      plans: [
+        {
+          name: "Starter",
+          price: "$100",
+          desc: "For small academies and centers.",
+          limits: ["Up to 200 students", "Up to 10 teachers", "Up to 15 courses", "1 branch", "Up to 5 admin users"],
+          features: ["Student management", "Teacher management", "Course & class management", "Schedules & rooms", "Attendance", "Payments", "Basic notifications", "Basic reports", "Email Support", "Help Center"],
+        },
+        {
+          name: "Business",
+          price: "$120",
+          popular: true,
+          desc: "For academies that need advanced management and analytics.",
+          limits: ["Up to 500 students", "Up to 30 teachers", "Unlimited courses", "1 branch", "Up to 15 admin users"],
+          features: ["Everything in Starter", "Advanced permissions", "Custom roles", "Activity history", "Bulk actions", "Advanced attendance reports", "Advanced financial reports", "Student analytics", "Attendance analytics", "Revenue analytics", "Targeted notifications", "Priority Support"],
+        },
+        {
+          name: "Professional",
+          price: "$170",
+          desc: "For multi-branch academies and advanced organizations.",
+          limits: ["Up to 1,500 students", "Unlimited teachers", "Unlimited courses", "Up to 3 branches", "Unlimited admin users"],
+          features: ["Everything in Business", "Multi-branch management", "Branch managers", "Per-branch reports", "Branch comparison", "Advanced analytics", "Customizable reports", "Branch-level permissions", "API access", "Logo & brand customization", "Onboarding assistance"],
+        },
+        {
+          name: "Enterprise",
+          custom: true,
+          price: "Custom",
+          desc: "For large academies and institutions.",
+          limits: ["Custom student count", "Multiple branches based on contract", "Custom infrastructure when needed"],
+          features: ["White Label", "Custom Domain", "Custom Apps", "Custom Workflows", "Integrations", "Advanced API", "Custom Reports", "Custom Permissions", "Data Migration", "Employee Training", "Dedicated Support", "SLA"],
+        },
+      ],
+      note: "White Label, source-code ownership and exclusivity are separate contractual matters and are not automatically included in the Enterprise subscription.",
+    },
+    about: {
+      eyebrow: "About CenterOS",
+      title: "One system to manage your entire academy",
+      text: "CenterOS is built for academies and educational and training centers that want to organize daily operations, reduce manual work and gain clearer visibility into their organization.",
+      points: [
+        "Clear and easy-to-use interface",
+        "Centralized student, teacher and course management",
+        "Attendance, payments and reports in one place",
+        "Multi-branch support in advanced plans",
+        "Secure and scalable architecture",
+      ],
+    },
+    contact: {
+      eyebrow: "Get started with CenterOS",
+      title: "Ready to manage your academy better?",
+      text: "Send us your academy details and we will contact you to discuss your needs and the right plan.",
+      manager: "Manager name",
+      academy: "Center / Academy name",
+      email: "Email address",
+      branches: "Number of branches",
+      students: "Expected number of students",
+      info: "Additional information",
+      submit: "Send Booking Request",
+      privacy: "Internal contact numbers and submitted request data will never be exposed publicly.",
+    },
+    footer: {
+      description: "Complete management platform for academies and educational centers.",
+      email: "centeros@centeros.online",
+      rights: "All rights reserved.",
+    },
+  },
+
+  tr: {
+    dir: "ltr",
+    nav: {
+      home: "Ana Sayfa",
+      features: "Özellikler",
+      pricing: "Fiyatlar",
+      about: "Hakkımızda",
+      contact: "İletişim",
+    },
+    cta: "Yerini Ayırt",
+    hero: {
+      eyebrow: "centerOS",
+      title: "Akademiler İçin Komple Yönetim Platformu",
+      text: "Öğrencileri, öğretmenleri, dersleri, yoklamayı, ödemeleri ve raporları tek bir güvenli ve kolay platformdan yönetin.",
+      primary: "Yerini Ayırt",
+      secondary: "Özellikleri Keşfet",
+    },
+    dashboard: {
+      title: "CenterOS Paneli",
+      subtitle: "Akademinizi tek yerden yönetin",
+      students: "Öğrenciler",
+      teachers: "Öğretmenler",
+      courses: "Kurslar",
+      attendance: "Yoklama",
+      revenue: "Ödemeler",
+      activity: "Son Aktiviteler",
+    },
+    features: {
+      eyebrow: "Neden CenterOS?",
+      title: "Akademinizi yönetmek için ihtiyacınız olan her şey",
+      text: "CenterOS, akademinizin günlük operasyonlarını tek ve anlaşılır bir sistemde birleştirir.",
+      items: [
+        ["Öğrenci Yönetimi", "Öğrenci profillerini, durumlarını, arama ve filtreleme işlemlerini kolayca yönetin."],
+        ["Öğretmen Yönetimi", "Öğretmenleri, yetkileri ve görevleri tek bir yerden yönetin."],
+        ["Dersler ve Program", "Dersleri, programları, sınıfları ve salonları kolayca organize edin."],
+        ["Yoklama", "Yoklama, devamsızlık, geç kalma ve öğrenci geçmişini takip edin."],
+        ["Ödemeler", "Ödemeleri, kalan bakiyeleri ve son ödeme tarihlerini takip edin."],
+        ["Raporlar", "Öğrenciler, yoklama, kurslar ve ödemeler hakkında net raporlar alın."],
+      ],
+    },
+    pricing: {
+      eyebrow: "Fiyatlar",
+      title: "Akademinize uygun planı seçin",
+      text: "Temel ihtiyaçlardan gelişmiş kurumsal yönetime kadar net planlar.",
+      monthly: "Aylık",
+      plans: [
+        {
+          name: "Starter",
+          price: "$100",
+          desc: "Küçük akademiler ve merkezler için.",
+          limits: ["200 öğrenciye kadar", "10 öğretmene kadar", "15 kursa kadar", "1 şube", "5 yöneticiye kadar"],
+          features: ["Öğrenci yönetimi", "Öğretmen yönetimi", "Kurs ve ders yönetimi", "Program ve salonlar", "Yoklama", "Ödemeler", "Temel bildirimler", "Temel raporlar", "Email Support", "Help Center"],
+        },
+        {
+          name: "Business",
+          price: "$120",
+          popular: true,
+          desc: "Gelişmiş yönetim ve analiz ihtiyacı olan akademiler için.",
+          limits: ["500 öğrenciye kadar", "30 öğretmene kadar", "Sınırsız kurs", "1 şube", "15 yöneticiye kadar"],
+          features: ["Starter'daki her şey", "Gelişmiş yetkiler", "Özel roller", "Aktivite geçmişi", "Toplu işlemler", "Gelişmiş yoklama raporları", "Gelişmiş finans raporları", "Öğrenci analitiği", "Yoklama analitiği", "Gelir analitiği", "Hedefli bildirimler", "Priority Support"],
+        },
+        {
+          name: "Professional",
+          price: "$170",
+          desc: "Çok şubeli akademiler ve gelişmiş kurumlar için.",
+          limits: ["1.500 öğrenciye kadar", "Sınırsız öğretmen", "Sınırsız kurs", "3 şubeye kadar", "Sınırsız yönetici"],
+          features: ["Business'taki her şey", "Çok şubeli yönetim", "Şube yöneticileri", "Şube bazlı raporlar", "Şube performans karşılaştırması", "Gelişmiş analitik", "Özelleştirilebilir raporlar", "Şube bazlı yetkiler", "API erişimi", "Logo ve marka özelleştirme", "Onboarding desteği"],
+        },
+        {
+          name: "Enterprise",
+          custom: true,
+          price: "Custom",
+          desc: "Büyük akademiler ve kurumlar için.",
+          limits: ["İhtiyaca göre öğrenci sayısı", "Sözleşmeye göre çoklu şube", "Gerektiğinde özel altyapı"],
+          features: ["White Label", "Özel Domain", "Özel Uygulamalar", "Özel İş Akışları", "Entegrasyonlar", "Gelişmiş API", "Özel Raporlar", "Özel Yetkiler", "Veri Taşıma", "Çalışan Eğitimi", "Özel Destek", "SLA"],
+        },
+      ],
+      note: "White Label, kaynak kodu sahipliği ve münhasırlık ayrı sözleşme koşullarıdır ve Enterprise aboneliğine otomatik olarak dahil değildir.",
+    },
+    about: {
+      eyebrow: "CenterOS Hakkında",
+      title: "Akademinizin tamamını yönetmek için tek sistem",
+      text: "CenterOS, günlük operasyonlarını düzenlemek, manuel işleri azaltmak ve kurumun performansını daha net görmek isteyen akademiler ve eğitim merkezleri için tasarlanmıştır.",
+      points: [
+        "Net ve kolay kullanılabilir arayüz",
+        "Merkezi öğrenci, öğretmen ve kurs yönetimi",
+        "Yoklama, ödemeler ve raporlar tek yerde",
+        "Gelişmiş planlarda çoklu şube desteği",
+        "Güvenli ve ölçeklenebilir yapı",
+      ],
+    },
+    contact: {
+      eyebrow: "CenterOS ile başlayın",
+      title: "Akademinizi daha iyi yönetmeye hazır mısınız?",
+      text: "Akademi bilgilerinizi gönderin, ihtiyaçlarınızı ve uygun planı görüşmek için sizinle iletişime geçelim.",
+      manager: "Yetkili adı",
+      academy: "Merkez / Akademi adı",
+      email: "E-posta",
+      branches: "Şube sayısı",
+      students: "Tahmini öğrenci sayısı",
+      info: "Ek bilgiler",
+      submit: "Rezervasyon Talebi Gönder",
+      privacy: "Dahili iletişim numaraları ve gönderilen talep bilgileri herkese açık olarak gösterilmez.",
+    },
+    footer: {
+      description: "Akademiler ve eğitim merkezleri için komple yönetim platformu.",
+      email: "centeros@centeros.online",
+      rights: "Tüm hakları saklıdır.",
+    },
+  },
+};
+
+function Icon({ name }) {
+  const icons = {
+    users: "♙",
+    teacher: "◈",
+    course: "▦",
+    attendance: "✓",
+    payments: "$",
+    reports: "⌁",
+    arrow: "→",
+    shield: "◇",
+    chart: "↗",
+    clock: "◷",
+    menu: "☰",
+    close: "×",
+  };
+
+  return <span className={`public-icon public-icon-${name}`}>{icons[name] || "•"}</span>;
+}
+
+export default function PublicSite() {
+  const [language, setLanguage] = useState("ar");
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [form, setForm] = useState({
+    manager: "",
+    academy: "",
+    email: "",
+    branches: "",
+    students: "",
+    info: "",
+  });
+
+  const t = translations[language];
+
+  const changeLanguage = (next) => {
+    setLanguage(next);
+    document.documentElement.lang = next;
+    document.documentElement.dir = t.dir;
+  };
+
+  const scrollTo = (id) => {
+    setMobileOpen(false);
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const submitForm = (event) => {
+    event.preventDefault();
+
+    // Backend/WhatsApp integration will be connected later.
+    // Internal receiving numbers are intentionally not exposed here.
+    console.log("CenterOS booking request:", form);
+  };
+
+  const featureIcons = ["users", "teacher", "course", "attendance", "payments", "reports"];
+
+  return (
+    <div className="public-site" dir={t.dir}>
+      <header className="public-header">
+        <div className="public-container public-nav">
+          <button className="public-brand" onClick={() => scrollTo("home")} aria-label="CenterOS">
+            <img src="/logo.png" alt="CenterOS" />
+            <span>centerOS</span>
+          </button>
+
+          <nav className={`public-nav-links ${mobileOpen ? "open" : ""}`}>
+            <button onClick={() => scrollTo("home")}>{t.nav.home}</button>
+            <button onClick={() => scrollTo("features")}>{t.nav.features}</button>
+            <button onClick={() => scrollTo("pricing")}>{t.nav.pricing}</button>
+            <button onClick={() => scrollTo("about")}>{t.nav.about}</button>
+            <button onClick={() => scrollTo("contact")}>{t.nav.contact}</button>
+            <button className="mobile-cta" onClick={() => scrollTo("contact")}>{t.cta}</button>
+          </nav>
+
+          <div className="public-nav-actions">
+            <div className="language-switcher">
+              {["ar", "en", "tr"].map((lang) => (
+                <button
+                  key={lang}
+                  className={language === lang ? "active" : ""}
+                  onClick={() => changeLanguage(lang)}
+                >
+                  {lang.toUpperCase()}
+                </button>
+              ))}
+            </div>
+
+            <button className="desktop-cta" onClick={() => scrollTo("contact")}>
+              {t.cta}
+            </button>
+
+            <button
+              className="mobile-menu-button"
+              onClick={() => setMobileOpen((value) => !value)}
+              aria-label="Menu"
+            >
+              <Icon name={mobileOpen ? "close" : "menu"} />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section id="home" className="public-hero">
+          <div className="public-container hero-grid">
+            <div className="hero-copy">
+              <div className="hero-eyebrow">
+                <span className="eyebrow-line" />
+                {t.hero.eyebrow}
+              </div>
+
+              <h1>{t.hero.title}</h1>
+              <p>{t.hero.text}</p>
+
+              <div className="hero-actions">
+                <button className="primary-button" onClick={() => scrollTo("contact")}>
+                  {t.hero.primary}
+                  <Icon name="arrow" />
+                </button>
+
+                <button className="secondary-button" onClick={() => scrollTo("features")}>
+                  {t.hero.secondary}
+                </button>
+              </div>
+
+              <div className="hero-trust">
+                <div className="trust-item">
+                  <Icon name="shield" />
+                  <span>{language === "ar" ? "نظام آمن" : language === "tr" ? "Güvenli Sistem" : "Secure System"}</span>
+                </div>
+                <div className="trust-item">
+                  <Icon name="chart" />
+                  <span>{language === "ar" ? "قابل للتوسع" : language === "tr" ? "Ölçeklenebilir" : "Scalable"}</span>
+                </div>
+                <div className="trust-item">
+                  <Icon name="clock" />
+                  <span>{language === "ar" ? "إدارة أسهل" : language === "tr" ? "Kolay Yönetim" : "Easy Management"}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="hero-visual">
+              <div className="visual-glow" />
+              <div className="dashboard-window">
+                <div className="window-top">
+                  <div className="window-dots">
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                  <span className="window-title">centerOS</span>
+                </div>
+
+                <div className="mock-dashboard">
+                  <aside className="mock-sidebar">
+                    <div className="mock-logo">
+                      <img src="/logo.png" alt="" />
+                    </div>
+                    <span className="mock-active" />
+                    <span />
+                    <span />
+                    <span />
+                    <span />
+                    <span />
+                  </aside>
+
+                  <div className="mock-content">
+                    <div className="mock-heading">
+                      <div>
+                        <small>{t.dashboard.subtitle}</small>
+                        <strong>{t.dashboard.title}</strong>
+                      </div>
+                      <div className="mock-avatar" />
+                    </div>
+
+                    <div className="mock-stats">
+                      <div><small>{t.dashboard.students}</small><strong>—</strong></div>
+                      <div><small>{t.dashboard.teachers}</small><strong>—</strong></div>
+                      <div><small>{t.dashboard.courses}</small><strong>—</strong></div>
+                      <div><small>{t.dashboard.attendance}</small><strong>—</strong></div>
+                    </div>
+
+                    <div className="mock-panels">
+                      <div className="mock-chart">
+                        <div className="mock-panel-title">{t.dashboard.activity}</div>
+                        <div className="chart-bars">
+                          <i /><i /><i /><i /><i /><i /><i />
+                        </div>
+                      </div>
+                      <div className="mock-side-panel">
+                        <div className="mock-panel-title">{t.dashboard.revenue}</div>
+                        <div className="mock-ring" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="features" className="public-section features-section">
+          <div className="public-container">
+            <div className="section-heading">
+              <span>{t.features.eyebrow}</span>
+              <h2>{t.features.title}</h2>
+              <p>{t.features.text}</p>
+            </div>
+
+            <div className="feature-grid">
+              {t.features.items.map(([title, text], index) => (
+                <article className="feature-card" key={title}>
+                  <div className="feature-icon">
+                    <Icon name={featureIcons[index]} />
+                  </div>
+                  <div>
+                    <h3>{title}</h3>
+                    <p>{text}</p>
+                  </div>
+                  <span className="feature-number">0{index + 1}</span>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="pricing" className="public-section pricing-section">
+          <div className="public-container">
+            <div className="section-heading">
+              <span>{t.pricing.eyebrow}</span>
+              <h2>{t.pricing.title}</h2>
+              <p>{t.pricing.text}</p>
+            </div>
+
+            <div className="pricing-grid">
+              {t.pricing.plans.map((plan) => (
+                <article className={`pricing-card ${plan.popular ? "popular" : ""}`} key={plan.name}>
+                  {plan.popular && (
+                    <div className="popular-badge">
+                      {language === "ar" ? "الأكثر طلبًا" : language === "tr" ? "En Popüler" : "Most Popular"}
+                    </div>
+                  )}
+
+                  <div className="pricing-top">
+                    <span className="plan-name">{plan.name}</span>
+                    <p>{plan.desc}</p>
+                    <div className="plan-price">
+                      <strong>{plan.price}</strong>
+                      {!plan.custom && <small>/ {t.pricing.monthly}</small>}
+                    </div>
+                  </div>
+
+                  <div className="plan-limits">
+                    {plan.limits.map((item) => <span key={item}>✓ {item}</span>)}
+                  </div>
+
+                  <div className="plan-features">
+                    {plan.features.map((item) => <span key={item}>✓ {item}</span>)}
+                  </div>
+
+                  <button className={plan.popular ? "primary-button full" : "secondary-button full"} onClick={() => scrollTo("contact")}>
+                    {plan.custom ? (language === "ar" ? "تواصل معنا" : language === "tr" ? "İletişime Geç" : "Contact Us") : t.cta}
+                  </button>
+                </article>
+              ))}
+            </div>
+
+            <p className="pricing-note">{t.pricing.note}</p>
+          </div>
+        </section>
+
+        <section id="about" className="public-section about-section">
+          <div className="public-container about-grid">
+            <div className="about-visual">
+              <div className="about-orbit orbit-one" />
+              <div className="about-orbit orbit-two" />
+              <div className="about-logo-card">
+                <img src="/logo.png" alt="CenterOS" />
+                <strong>centerOS</strong>
+                <span>Academy Management</span>
+              </div>
+            </div>
+
+            <div className="about-copy">
+              <div className="section-heading align-start">
+                <span>{t.about.eyebrow}</span>
+                <h2>{t.about.title}</h2>
+                <p>{t.about.text}</p>
+              </div>
+
+              <div className="about-points">
+                {t.about.points.map((point) => (
+                  <div key={point}>
+                    <span>✓</span>
+                    <p>{point}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="contact" className="public-section contact-section">
+          <div className="public-container contact-card">
+            <div className="contact-copy">
+              <div className="section-heading align-start">
+                <span>{t.contact.eyebrow}</span>
+                <h2>{t.contact.title}</h2>
+                <p>{t.contact.text}</p>
+              </div>
+
+              <div className="contact-email">
+                <span>✉</span>
+                <div>
+                  <small>Email</small>
+                  <strong>{t.footer.email}</strong>
+                </div>
+              </div>
+            </div>
+
+            <form className="booking-form" onSubmit={submitForm}>
+              <div className="form-row">
+                <label>
+                  <span>{t.contact.manager}</span>
+                  <input
+                    value={form.manager}
+                    onChange={(e) => setForm({ ...form, manager: e.target.value })}
+                    required
+                  />
+                </label>
+
+                <label>
+                  <span>{t.contact.academy}</span>
+                  <input
+                    value={form.academy}
+                    onChange={(e) => setForm({ ...form, academy: e.target.value })}
+                    required
+                  />
+                </label>
+              </div>
+
+              <div className="form-row">
+                <label>
+                  <span>{t.contact.email}</span>
+                  <input
+                    type="email"
+                    value={form.email}
+                    onChange={(e) => setForm({ ...form, email: e.target.value })}
+                    required
+                  />
+                </label>
+
+                <label>
+                  <span>{t.contact.branches}</span>
+                  <input
+                    type="number"
+                    min="1"
+                    value={form.branches}
+                    onChange={(e) => setForm({ ...form, branches: e.target.value })}
+                    required
+                  />
+                </label>
+              </div>
+
+              <label>
+                <span>{t.contact.students}</span>
+                <input
+                  type="number"
+                  min="1"
+                  value={form.students}
+                  onChange={(e) => setForm({ ...form, students: e.target.value })}
+                  required
+                />
+              </label>
+
+              <label>
+                <span>{t.contact.info}</span>
+                <textarea
+                  rows="4"
+                  value={form.info}
+                  onChange={(e) => setForm({ ...form, info: e.target.value })}
+                />
+              </label>
+
+              <button type="submit" className="primary-button full">
+                {t.contact.submit}
+                <Icon name="arrow" />
+              </button>
+
+              <small className="form-privacy">{t.contact.privacy}</small>
+            </form>
+          </div>
+        </section>
+      </main>
+
+      <footer className="public-footer">
+        <div className="public-container footer-inner">
+          <div className="footer-brand">
+            <img src="/logo.png" alt="CenterOS" />
+            <div>
+              <strong>centerOS</strong>
+              <p>{t.footer.description}</p>
+            </div>
+          </div>
+
+          <div className="footer-links">
+            <button onClick={() => scrollTo("features")}>{t.nav.features}</button>
+            <button onClick={() => scrollTo("pricing")}>{t.nav.pricing}</button>
+            <button onClick={() => scrollTo("about")}>{t.nav.about}</button>
+            <button onClick={() => scrollTo("contact")}>{t.nav.contact}</button>
+          </div>
+
+          <div className="footer-contact">
+            <a href="mailto:centeros@centeros.online">{t.footer.email}</a>
+            <span>© {new Date().getFullYear()} CenterOS. {t.footer.rights}</span>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
