@@ -499,13 +499,7 @@ function PublicSite() {
                     ? "Akademiler için kapsamlı yönetim platformu"
                     : "Complete management platform for academies"}
                 </span>
-                <em>
-                  {isArabic
-                    ? "وتنمو بثقة"
-                    : language === "tr"
-                    ? "ve güvenle büyüyün"
-                    : "and grow with confidence"}
-                </em>
+
               </h1>
 
               <p className="hero-description">
