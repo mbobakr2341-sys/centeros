@@ -236,8 +236,18 @@ function AppMockup() {
 
 function Countdown() {
   const launchDate = useMemo(() => {
+    const storageKey = "centeros_launch_countdown_end";
+    const storedEndDate = localStorage.getItem(storageKey);
+
+    if (storedEndDate) {
+      return new Date(storedEndDate);
+    }
+
     const date = new Date();
     date.setDate(date.getDate() + 90);
+
+    localStorage.setItem(storageKey, date.toISOString());
+
     return date;
   }, []);
 
@@ -630,7 +640,7 @@ function PublicSite() {
                   button.textContent = "جاري الإرسال...";
 
                   const response = await fetch(
-                    "http://localhost:8080/api/v1/public/booking",
+                    "/api/booking",
                     {
                       method: "POST",
                       headers: {

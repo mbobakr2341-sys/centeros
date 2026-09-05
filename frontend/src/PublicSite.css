@@ -1451,7 +1451,10 @@ html[dir="ltr"] .trust-strip > div {
     text-align: left;
   }
 
-  .language-switcher,
+  .language-switcher {
+    display: flex;
+  }
+
   .header-book {
     display: none;
   }
