@@ -929,7 +929,15 @@ function PublicSite() {
 
               <label>
                 عدد الطلاب المتوقع
-                <input type="number" name="students" min="1" placeholder="مثال: 500" />
+                <select name="students" defaultValue="">
+                  <option value="" disabled>اختر عدد الطلاب</option>
+                  <option>100</option>
+                  <option>200</option>
+                  <option>300</option>
+                  <option>400</option>
+                  <option>500</option>
+                  <option>Custom</option>
+                </select>
               </label>
 
               <label>
