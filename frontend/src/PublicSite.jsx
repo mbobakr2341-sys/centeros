@@ -122,6 +122,98 @@ function formatNumber(value) {
 }
 
 function AppMockup() {
+  const isArabic = document.documentElement.lang === "ar";
+  const language = document.documentElement.lang;
+
+  const text = {
+    ar: {
+      home: "الرئيسية",
+      students: "الطلاب",
+      teachers: "المعلمون",
+      lessons: "الدروس",
+      attendance: "الحضور",
+      payments: "المدفوعات",
+      reports: "التقارير",
+      settings: "الإعدادات",
+      dashboard: "لوحة التحكم",
+      welcome: "مرحبًا بك في CenterOS",
+      summary: "إليك ملخص أداء الأكاديمية اليوم",
+      live: "مباشر",
+      studentsCount: "الطلاب",
+      teachersCount: "المعلمون",
+      courses: "الكورسات",
+      attendanceRate: "نسبة الحضور",
+      attendanceOverview: "نظرة عامة على الحضور",
+      thisWeek: "هذا الأسبوع",
+      recentActivity: "آخر العمليات",
+      newStudent: "تسجيل طالب جديد",
+      paymentUpdate: "تحديث دفعة",
+      addLesson: "إضافة حصة",
+      minutes8: "منذ 8 دقائق",
+      minutes21: "منذ 21 دقيقة",
+      minutes35: "منذ 35 دقيقة",
+      monthlyRevenue: "الإيرادات الشهرية",
+    },
+    tr: {
+      home: "Ana Sayfa",
+      students: "Öğrenciler",
+      teachers: "Öğretmenler",
+      lessons: "Dersler",
+      attendance: "Yoklama",
+      payments: "Ödemeler",
+      reports: "Raporlar",
+      settings: "Ayarlar",
+      dashboard: "Kontrol Paneli",
+      welcome: "CenterOS'a hoş geldiniz",
+      summary: "Akademinizin bugünkü performans özeti",
+      live: "Canlı",
+      studentsCount: "Öğrenciler",
+      teachersCount: "Öğretmenler",
+      courses: "Kurslar",
+      attendanceRate: "Yoklama oranı",
+      attendanceOverview: "Yoklama genel görünümü",
+      thisWeek: "Bu hafta",
+      recentActivity: "Son işlemler",
+      newStudent: "Yeni öğrenci kaydı",
+      paymentUpdate: "Ödeme güncellemesi",
+      addLesson: "Ders ekleme",
+      minutes8: "8 dakika önce",
+      minutes21: "21 dakika önce",
+      minutes35: "35 dakika önce",
+      monthlyRevenue: "Aylık gelir",
+    },
+    en: {
+      home: "Home",
+      students: "Students",
+      teachers: "Teachers",
+      lessons: "Lessons",
+      attendance: "Attendance",
+      payments: "Payments",
+      reports: "Reports",
+      settings: "Settings",
+      dashboard: "Dashboard",
+      welcome: "Welcome to CenterOS",
+      summary: "Here is your academy's performance summary for today",
+      live: "Live",
+      studentsCount: "Students",
+      teachersCount: "Teachers",
+      courses: "Courses",
+      attendanceRate: "Attendance rate",
+      attendanceOverview: "Attendance overview",
+      thisWeek: "This week",
+      recentActivity: "Recent activity",
+      newStudent: "New student registration",
+      paymentUpdate: "Payment update",
+      addLesson: "Lesson added",
+      minutes8: "8 minutes ago",
+      minutes21: "21 minutes ago",
+      minutes35: "35 minutes ago",
+      monthlyRevenue: "Monthly revenue",
+    },
+  };
+
+  const t = text[language] || text.en;
+
   return (
     <div className="mockup-shell">
       <div className="mockup-glow" />
@@ -142,44 +234,47 @@ function AppMockup() {
 
         <div className="dashboard-body">
           <aside className="mock-sidebar">
-            <div className="side-active">الرئيسية</div>
-            <div>الطلاب</div>
-            <div>المعلمون</div>
-            <div>الدروس</div>
-            <div>الحضور</div>
-            <div>المدفوعات</div>
-            <div>التقارير</div>
-            <div>الإعدادات</div>
+            <div className="side-active">{t.home}</div>
+            <div>{t.students}</div>
+            <div>{t.teachers}</div>
+            <div>{t.lessons}</div>
+            <div>{t.attendance}</div>
+            <div>{t.payments}</div>
+            <div>{t.reports}</div>
+            <div>{t.settings}</div>
           </aside>
 
           <main className="mock-content">
             <div className="mock-welcome">
               <div>
-                <small>لوحة التحكم</small>
-                <h3>مرحبًا بك في CenterOS</h3>
-                <p>إليك ملخص أداء الأكاديمية اليوم</p>
+                <small>{t.dashboard}</small>
+                <h3>{t.welcome}</h3>
+                <p>{t.summary}</p>
               </div>
-              <span className="mock-status">مباشر</span>
+              <span className="mock-status">{t.live}</span>
             </div>
 
             <div className="mock-stats">
               <div>
-                <small>الطلاب</small>
+                <small>{t.studentsCount}</small>
                 <strong>1,248</strong>
                 <span>+12.5%</span>
               </div>
+
               <div>
-                <small>المعلمون</small>
+                <small>{t.teachersCount}</small>
                 <strong>86</strong>
                 <span>+8.2%</span>
               </div>
+
               <div>
-                <small>الكورسات</small>
+                <small>{t.courses}</small>
                 <strong>32</strong>
                 <span>+4.1%</span>
               </div>
+
               <div>
-                <small>نسبة الحضور</small>
+                <small>{t.attendanceRate}</small>
                 <strong>91%</strong>
                 <span>+6.4%</span>
               </div>
@@ -187,8 +282,8 @@ function AppMockup() {
 
             <div className="mock-chart-card">
               <div className="mock-card-title">
-                <strong>نظرة عامة على الحضور</strong>
-                <span>هذا الأسبوع</span>
+                <strong>{t.attendanceOverview}</strong>
+                <span>{t.thisWeek}</span>
               </div>
 
               <div className="fake-chart">
@@ -201,21 +296,35 @@ function AppMockup() {
                   <i style={{ left: "77%", bottom: "79%" }} />
                   <i style={{ left: "92%", bottom: "75%" }} />
                 </div>
+
                 <div className="chart-grid" />
               </div>
             </div>
 
             <div className="mock-bottom-grid">
               <div className="mock-list">
-                <strong>آخر العمليات</strong>
-                <div><span>تسجيل طالب جديد</span><b>منذ 8 دقائق</b></div>
-                <div><span>تحديث دفعة</span><b>منذ 21 دقيقة</b></div>
-                <div><span>إضافة حصة</span><b>منذ 35 دقيقة</b></div>
+                <strong>{t.recentActivity}</strong>
+
+                <div>
+                  <span>{t.newStudent}</span>
+                  <b>{t.minutes8}</b>
+                </div>
+
+                <div>
+                  <span>{t.paymentUpdate}</span>
+                  <b>{t.minutes21}</b>
+                </div>
+
+                <div>
+                  <span>{t.addLesson}</span>
+                  <b>{t.minutes35}</b>
+                </div>
               </div>
 
               <div className="mock-mini-card">
-                <small>الإيرادات الشهرية</small>
+                <small>{t.monthlyRevenue}</small>
                 <strong>$18,420</strong>
+
                 <div className="mini-bars">
                   <i />
                   <i />
@@ -235,21 +344,10 @@ function AppMockup() {
 }
 
 function Countdown() {
-  const launchDate = useMemo(() => {
-    const storageKey = "centeros_launch_countdown_end";
-    const storedEndDate = localStorage.getItem(storageKey);
-
-    if (storedEndDate) {
-      return new Date(storedEndDate);
-    }
-
-    const date = new Date();
-    date.setDate(date.getDate() + 90);
-
-    localStorage.setItem(storageKey, date.toISOString());
-
-    return date;
-  }, []);
+  const launchDate = useMemo(
+    () => new Date("2026-12-04T00:00:00+03:00"),
+    []
+  );
 
   const calculate = () => {
     const difference = Math.max(0, launchDate.getTime() - Date.now());
@@ -311,6 +409,23 @@ function PublicSite() {
     navAbout: isArabic ? "عن النظام" : language === "tr" ? "Sistem Hakkında" : "About",
     navContact: isArabic ? "تواصل معنا" : language === "tr" ? "İletişim" : "Contact",
     book: isArabic ? "احجز مكانك الآن" : language === "tr" ? "Şimdi Yer Ayırt" : "Book Your Place",
+
+    featuresTitle: isArabic ? "لماذا تختار CenterOS؟" : language === "tr" ? "Neden CenterOS?" : "Why choose CenterOS?",
+    featuresText: isArabic
+      ? "أدوات واضحة تساعدك على إدارة مؤسستك التعليمية بكفاءة أكبر."
+      : language === "tr"
+      ? "Eğitim kurumunuzu daha verimli yönetmenize yardımcı olan araçlar."
+      : "Clear tools to manage your educational organization more efficiently.",
+
+    pricingTitle: isArabic ? "خطط مرنة تناسب احتياجاتك" : language === "tr" ? "İhtiyaçlarınıza uygun esnek planlar" : "Flexible plans that fit your needs",
+    pricingText: isArabic
+      ? "اختر الخطة المناسبة لحجم مؤسستك التعليمية."
+      : language === "tr"
+      ? "Eğitim kurumunuzun büyüklüğüne uygun planı seçin."
+      : "Choose the plan that fits your educational organization.",
+
+    monthly: isArabic ? "شهري" : language === "tr" ? "Aylık" : "Monthly",
+    yearly: isArabic ? "سنوي" : language === "tr" ? "Yıllık" : "Yearly",
   };
 
   const scrollTo = (id) => {
@@ -377,43 +492,126 @@ function PublicSite() {
 
               <h1>
                 CenterOS
-                <span>منصة إدارة متكاملة للأكاديميات</span>
-                <em>وتنمو بثقة</em>
+                <span>
+                  {isArabic
+                    ? "منصة إدارة متكاملة للأكاديميات"
+                    : language === "tr"
+                    ? "Akademiler için kapsamlı yönetim platformu"
+                    : "Complete management platform for academies"}
+                </span>
+                <em>
+                  {isArabic
+                    ? "وتنمو بثقة"
+                    : language === "tr"
+                    ? "ve güvenle büyüyün"
+                    : "and grow with confidence"}
+                </em>
               </h1>
 
               <p className="hero-description">
-                كل ما تحتاجه لإدارة الطلاب، المعلمين، الدروس، الحضور،
-                المدفوعات والتقارير في منصة واحدة سهلة وآمنة.
+                {isArabic
+                  ? "كل ما تحتاجه لإدارة الطلاب، المعلمين، الدروس، الحضور، المدفوعات والتقارير في منصة واحدة سهلة وآمنة."
+                  : language === "tr"
+                  ? "Öğrencileri, öğretmenleri, dersleri, yoklamayı, ödemeleri ve raporları tek bir kolay ve güvenli platformdan yönetin."
+                  : "Everything you need to manage students, teachers, lessons, attendance, payments, and reports in one simple and secure platform."}
               </p>
 
               <div className="hero-points">
-                <span>يعمل على جميع الأجهزة</span>
-                <span>أمان وخصوصية</span>
-                <span>دعم مستمر</span>
+                <span>
+                  {isArabic
+                    ? "يعمل على جميع الأجهزة"
+                    : language === "tr"
+                    ? "Tüm cihazlarda çalışır"
+                    : "Works on all devices"}
+                </span>
+
+                <span>
+                  {isArabic
+                    ? "أمان وخصوصية"
+                    : language === "tr"
+                    ? "Güvenlik ve gizlilik"
+                    : "Security & privacy"}
+                </span>
+
+                <span>
+                  {isArabic
+                    ? "دعم مستمر"
+                    : language === "tr"
+                    ? "Sürekli destek"
+                    : "Ongoing support"}
+                </span>
               </div>
 
               <div className="launch-card">
                 <div className="launch-header">
                   <div>
-                    <small>الإطلاق الرسمي</small>
-                    <strong>متبقي حتى الإطلاق</strong>
+                    <small>
+                      {isArabic
+                        ? "الإطلاق الرسمي"
+                        : language === "tr"
+                        ? "Resmi lansman"
+                        : "Official launch"}
+                    </small>
+
+                    <strong>
+                      {isArabic
+                        ? "متبقي حتى الإطلاق"
+                        : language === "tr"
+                        ? "Lansmana kalan süre"
+                        : "Time until launch"}
+                    </strong>
                   </div>
-                  <span className="launch-badge">90 يوم</span>
+
+                  <span className="launch-badge">
+                    {isArabic
+                      ? "90 يوم"
+                      : language === "tr"
+                      ? "90 gün"
+                      : "90 days"}
+                  </span>
                 </div>
 
                 <Countdown />
 
                 <p>
-                  احجز مكانك مبكرًا واحصل على أولوية الوصول عند إطلاق CenterOS.
+                  {isArabic
+                    ? "احجز مكانك مبكرًا واحصل على أولوية الوصول عند إطلاق CenterOS."
+                    : language === "tr"
+                    ? "Erken rezervasyon yapın ve CenterOS lansmanında öncelikli erişim elde edin."
+                    : "Reserve your place early and get priority access when CenterOS launches."}
                 </p>
               </div>
 
               <div className="hero-actions">
-                <button className="primary-button" onClick={() => scrollTo("contact")}>
-                  احجز مكانك الآن
+                <button
+                  className="primary-button"
+                  onClick={() => scrollTo("contact")}
+                >
+                  {isArabic
+                    ? "احجز مكانك الآن"
+                    : language === "tr"
+                    ? "Şimdi yerinizi ayırtın"
+                    : "Book your place now"}
                 </button>
-                <button className="secondary-button" onClick={() => scrollTo("features")}>
-                  تعرف على المزيد
+
+                <a
+                  className="whatsapp-button"
+                  href="https://wa.me/201109330703"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  تواصل عبر واتساب
+                </a>
+
+                <button
+                  className="secondary-button"
+                  onClick={() => scrollTo("features")}
+                >
+                  {isArabic
+                    ? "تعرف على المزيد"
+                    : language === "tr"
+                    ? "Daha fazla bilgi"
+                    : "Learn more"}
                 </button>
               </div>
             </div>
@@ -428,8 +626,8 @@ function PublicSite() {
           <div className="container">
             <div className="section-heading">
               <span>WHY CENTEROS</span>
-              <h2>لماذا تختار CenterOS؟</h2>
-              <p>أدوات واضحة تساعدك على إدارة مؤسستك التعليمية بكفاءة أكبر.</p>
+              <h2>{t.featuresTitle}</h2>
+              <p>{t.featuresText}</p>
             </div>
 
             <div className="features-grid">
@@ -467,8 +665,8 @@ function PublicSite() {
           <div className="container">
             <div className="section-heading">
               <span>PRICING</span>
-              <h2>خطط مرنة تناسب احتياجاتك</h2>
-              <p>اختر الخطة المناسبة لحجم مؤسستك التعليمية.</p>
+              <h2>{t.pricingTitle}</h2>
+              <p>{t.pricingText}</p>
             </div>
 
             <div className="billing-toggle">
