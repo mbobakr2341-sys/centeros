@@ -600,15 +600,6 @@ function PublicSite() {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  تواصل عبر واتساب
-                </a>
-
-                <a
-                  className="whatsapp-button"
-                  href="https://wa.me/201109330703"
-                  target="_blank"
-                  rel="noreferrer"
-                >
                   {isArabic
                     ? "تواصل عبر واتساب"
                     : language === "tr"
