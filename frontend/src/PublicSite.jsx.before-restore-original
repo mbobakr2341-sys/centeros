@@ -1,0 +1,952 @@
+import { useEffect, useState } from "react";
+import "./PublicSite.css";
+
+const plans = [
+  {
+    name: "Starter",
+    subtitle: "For small centers getting started.",
+    monthly: "$100",
+    yearly: "999 EGP",
+    features: [
+      "Student management",
+      "Basic reports",
+      "Attendance tracking",
+      "Email support",
+    ],
+  },
+  {
+    name: "Business",
+    subtitle: "For growing educational centers.",
+    monthly: "$120",
+    yearly: "1199 EGP",
+    popular: true,
+    features: [
+      "Everything in Starter",
+      "Advanced reports",
+      "Teacher management",
+      "Payment tracking",
+      "Priority support",
+    ],
+  },
+  {
+    name: "Professional",
+    subtitle: "For large centers & institutions.",
+    monthly: "$170",
+    yearly: "1699 EGP",
+    features: [
+      "Everything in Business",
+      "Full features access",
+      "Multi-branch support",
+      "Custom reports",
+      "24/7 support",
+    ],
+  },
+  {
+    name: "Enterprise",
+    subtitle: "Tailored for your needs.",
+    custom: true,
+    features: [
+      "Unlimited students",
+      "Dedicated account manager",
+      "Custom integrations",
+      "Advanced security",
+      "Tailored solutions",
+    ],
+  },
+];
+
+const featureItems = [
+  {
+    number: "01",
+    title: "Complete Management",
+    text: "Handle everything from students to payments in one powerful platform.",
+    icon: "shield",
+  },
+  {
+    number: "02",
+    title: "Save Time",
+    text: "Automate your daily tasks and focus on what matters.",
+    icon: "bolt",
+  },
+  {
+    number: "03",
+    title: "Boost Performance",
+    text: "Get real-time insights and make better decisions.",
+    icon: "chart",
+  },
+  {
+    number: "04",
+    title: "Grow Your Center",
+    text: "Built for schools, institutes and learning centers of all sizes.",
+    icon: "users",
+  },
+];
+
+function Icon({ type, size = 22 }) {
+  const common = {
+    width: size,
+    height: size,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg",
+    "aria-hidden": true,
+  };
+
+  if (type === "shield") {
+    return (
+      <svg {...common}>
+        <path
+          d="M12 3L19 6V11.5C19 16.1 16.1 19.7 12 21C7.9 19.7 5 16.1 5 11.5V6L12 3Z"
+          stroke="currentColor"
+          strokeWidth="1.8"
+        />
+        <path
+          d="M9.5 12L11.2 13.7L14.8 10"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    );
+  }
+
+  if (type === "bolt") {
+    return (
+      <svg {...common}>
+        <path
+          d="M13.5 2.8L5.8 13H11L10.5 21.2L18.2 11H13L13.5 2.8Z"
+          fill="currentColor"
+        />
+      </svg>
+    );
+  }
+
+  if (type === "chart") {
+    return (
+      <svg {...common}>
+        <path
+          d="M4 19V5M4 19H21"
+          stroke="currentColor"
+          strokeWidth="1.7"
+          strokeLinecap="round"
+        />
+        <path
+          d="M7 15L10 11L13 13L18 7"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    );
+  }
+
+  if (type === "users") {
+    return (
+      <svg {...common}>
+        <circle
+          cx="9"
+          cy="8"
+          r="3"
+          stroke="currentColor"
+          strokeWidth="1.7"
+        />
+        <circle
+          cx="17"
+          cy="9"
+          r="2.5"
+          stroke="currentColor"
+          strokeWidth="1.7"
+        />
+        <path
+          d="M3.5 19C3.8 15.5 6 13.5 9 13.5C12 13.5 14.2 15.5 14.5 19"
+          stroke="currentColor"
+          strokeWidth="1.7"
+          strokeLinecap="round"
+        />
+        <path
+          d="M14.5 14C17.4 13.5 20 15.1 20.5 18.5"
+          stroke="currentColor"
+          strokeWidth="1.7"
+          strokeLinecap="round"
+        />
+      </svg>
+    );
+  }
+
+  if (type === "globe") {
+    return (
+      <svg {...common}>
+        <circle
+          cx="12"
+          cy="12"
+          r="8.5"
+          stroke="currentColor"
+          strokeWidth="1.6"
+        />
+        <path
+          d="M3.8 12H20.2M12 3.5C14.2 5.8 15.2 8.7 15.2 12C15.2 15.3 14.2 18.2 12 20.5C9.8 18.2 8.8 15.3 8.8 12C8.8 8.7 9.8 5.8 12 3.5Z"
+          stroke="currentColor"
+          strokeWidth="1.4"
+        />
+      </svg>
+    );
+  }
+
+  if (type === "calendar") {
+    return (
+      <svg {...common}>
+        <rect
+          x="4"
+          y="5"
+          width="16"
+          height="15"
+          rx="2.5"
+          stroke="currentColor"
+          strokeWidth="1.6"
+        />
+        <path
+          d="M8 3.5V7M16 3.5V7M4 9.5H20"
+          stroke="currentColor"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+        />
+      </svg>
+    );
+  }
+
+  if (type === "moon") {
+    return (
+      <svg {...common}>
+        <path
+          d="M19.5 15.2C18.4 16 17 16.5 15.5 16.5C11.4 16.5 8 13.1 8 9C8 7.5 8.5 6.1 9.3 5C5.8 6 3.5 9.2 3.5 13C3.5 17.7 7.3 21.5 12 21.5C15.8 21.5 19 19.2 20 15.7C19.8 15.5 19.7 15.4 19.5 15.2Z"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinejoin="round"
+        />
+      </svg>
+    );
+  }
+
+  return null;
+}
+
+function DashboardMockup() {
+  return (
+    <div className="dashboard-mockup">
+      <div className="mockup-browser">
+        <div className="browser-dots">
+          <span />
+          <span />
+          <span />
+        </div>
+
+        <div className="browser-address">
+          centeros.online/dashboard
+        </div>
+
+        <div className="browser-user">
+          <span className="mini-avatar" />
+          Admin
+        </div>
+      </div>
+
+      <div className="mockup-layout">
+        <aside className="mockup-sidebar">
+          <div className="mockup-logo">
+            <img src="/newlogo.png" alt="" />
+            <strong>CenterOS</strong>
+          </div>
+
+          <div className="mockup-nav active">
+            <span />
+            Overview
+          </div>
+
+          <div className="mockup-nav">
+            <span />
+            Students
+          </div>
+
+          <div className="mockup-nav">
+            <span />
+            Teachers
+          </div>
+
+          <div className="mockup-nav">
+            <span />
+            Courses
+          </div>
+
+          <div className="mockup-nav">
+            <span />
+            Attendance
+          </div>
+
+          <div className="mockup-nav">
+            <span />
+            Payments
+          </div>
+
+          <div className="mockup-nav">
+            <span />
+            Reports
+          </div>
+        </aside>
+
+        <div className="mockup-main">
+          <div className="mockup-heading">
+            <div>
+              <small>Dashboard</small>
+              <h3>Good morning, Admin</h3>
+            </div>
+
+            <div className="mockup-search">Search...</div>
+          </div>
+
+          <div className="mockup-stat-grid">
+            <div className="mockup-stat">
+              <small>Total Students</small>
+              <strong>1,248</strong>
+              <em>+12%</em>
+            </div>
+
+            <div className="mockup-stat">
+              <small>Active Teachers</small>
+              <strong>48</strong>
+              <em>+5%</em>
+            </div>
+
+            <div className="mockup-stat">
+              <small>Today's Classes</small>
+              <strong>24</strong>
+              <em>+8%</em>
+            </div>
+
+            <div className="mockup-stat">
+              <small>Monthly Revenue</small>
+              <strong>86,420</strong>
+              <em>+14%</em>
+            </div>
+          </div>
+
+          <div className="mockup-lower">
+            <div className="mockup-chart">
+              <div className="mockup-card-title">
+                <strong>Revenue Overview</strong>
+                <span>Last 6 months</span>
+              </div>
+
+              <div className="chart-area">
+                {[34, 44, 39, 55, 48, 70, 62, 84].map(
+                  (height, index) => (
+                    <div
+                      key={index}
+                      className="chart-bar"
+                      style={{ height: `${height}%` }}
+                    />
+                  )
+                )}
+              </div>
+            </div>
+
+            <div className="mockup-activity">
+              <div className="mockup-card-title">
+                <strong>Recent Activity</strong>
+                <span>View all</span>
+              </div>
+
+              <div className="activity-item">
+                <i>AH</i>
+                <div>
+                  <strong>New student registered</strong>
+                  <small>Ahmed Hassan · 5 min ago</small>
+                </div>
+              </div>
+
+              <div className="activity-item">
+                <i>SA</i>
+                <div>
+                  <strong>Payment received</strong>
+                  <small>Sarah Ali · 18 min ago</small>
+                </div>
+              </div>
+
+              <div className="activity-item">
+                <i>OM</i>
+                <div>
+                  <strong>Class completed</strong>
+                  <small>Omar Mohamed · 32 min ago</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PublicSite() {
+  const [theme, setTheme] = useState(
+    () => localStorage.getItem("centeros-theme") || "light"
+  );
+
+  const [language, setLanguage] = useState(() => localStorage.getItem("centeros-language") || "ar");
+  const [languageOpen, setLanguageOpen] = useState(false);
+  const [billing, setBilling] = useState("monthly");
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem("centeros-language", language);
+    document.documentElement.lang = language;
+    document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+  }, [language]);
+
+  useEffect(() => {
+    localStorage.setItem("centeros-theme", theme);
+    document.documentElement.dataset.theme = theme;
+  }, [theme]);
+
+  const changeLanguage = (value) => {
+    setLanguage(value);
+    setLanguageOpen(false);
+  };
+
+  const scrollTo = (id) => {
+    setMobileOpen(false);
+    document.getElementById(id)?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
+
+  return (
+    <div
+      className={`public-site ${language === "ar" ? "rtl" : ""}`}
+    >
+      <div className="launch-bar">
+        <div className="container launch-content">
+          <span className="launch-label">
+            Website Launching In
+          </span>
+
+          <div className="launch-countdown">
+            <div>
+              <strong>12</strong>
+              <small>Days</small>
+            </div>
+
+            <div>
+              <strong>08</strong>
+              <small>Hours</small>
+            </div>
+
+            <div>
+              <strong>45</strong>
+              <small>Minutes</small>
+            </div>
+
+            <div>
+              <strong>32</strong>
+              <small>Seconds</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <header className="site-header">
+        <div className="container header-inner">
+          <button
+            className="mobile-menu-button"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Menu"
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+
+          <button
+            className="brand"
+            onClick={() => scrollTo("home")}
+          >
+            <img src="/newlogo.png" alt="Course CenterOS" />
+            <span>
+              <strong>Course</strong>
+              <strong>CenterOS</strong>
+            </span>
+          </button>
+
+          <button
+            type="button"
+            className="theme-toggle"
+            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+            aria-label="Toggle theme"
+          >
+            <span>{theme === "light" ? "Dark" : "Light"}</span>
+          </button>
+          
+          <nav className="desktop-navigation">
+            <button
+              className="active"
+              onClick={() => scrollTo("home")}
+            >
+              Home
+            </button>
+
+            <button onClick={() => scrollTo("packages")}>
+              Packages
+            </button>
+
+            <button onClick={() => scrollTo("about")}>
+              About
+            </button>
+
+            <button onClick={() => scrollTo("contact")}>
+              Contact
+            </button>
+          </nav>
+
+          <div className="header-tools">
+            <div className="language-control">
+              <button
+                className="language-trigger"
+                onClick={() =>
+                  setLanguageOpen(!languageOpen)
+                }
+              >
+                <Icon type="globe" size={16} />
+                <span>
+                  {language === "ar"
+                    ? "العربية"
+                    : language === "tr"
+                    ? "Türkçe"
+                    : "English"}
+                </span>
+                <b>⌄</b>
+              </button>
+
+              {languageOpen && (
+                <div className="language-dropdown">
+                  <button onClick={() => changeLanguage("en")}>
+                    English
+                  </button>
+
+                  <button onClick={() => changeLanguage("ar")}>
+                    العربية
+                  </button>
+
+                  <button onClick={() => changeLanguage("tr")}>
+                    Türkçe
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <button className="theme-button">
+              <Icon type="moon" size={17} />
+            </button>
+
+            <button
+              className="header-book-button"
+              onClick={() => scrollTo("booking")}
+            >
+              <Icon type="calendar" size={16} />
+              Book a Call
+            </button>
+          </div>
+        </div>
+
+        {mobileOpen && (
+          <div className="mobile-navigation">
+            <button onClick={() => scrollTo("home")}>
+              Home
+            </button>
+            <button onClick={() => scrollTo("packages")}>
+              Packages
+            </button>
+            <button onClick={() => scrollTo("about")}>
+              About
+            </button>
+            <button onClick={() => scrollTo("contact")}>
+              Contact
+            </button>
+            <button onClick={() => scrollTo("booking")}>
+              Book a Call
+            </button>
+          </div>
+        )}
+      </header>
+
+      <main>
+        <section id="home" className="hero">
+          <div className="container hero-inner">
+            <div className="hero-copy">
+              <div className="hero-badge">
+                Smart Education Management
+              </div>
+
+              <h1>
+                Manage Your Center
+                <br />
+                Smarter with
+                <br />
+                <span>Course Center OS</span>
+              </h1>
+
+              <p>
+                The all-in-one platform to manage students,
+                teachers, courses, classes, attendance, payments
+                and more — all in one place.
+              </p>
+
+              <div className="hero-highlights">
+                <div>
+                  <span>
+                    <Icon type="bolt" size={17} />
+                  </span>
+                  <div>
+                    <strong>Easy to Use</strong>
+                    <small>Simple and intuitive</small>
+                  </div>
+                </div>
+
+                <div>
+                  <span>
+                    <Icon type="shield" size={17} />
+                  </span>
+                  <div>
+                    <strong>Secure & Reliable</strong>
+                    <small>Your data is safe</small>
+                  </div>
+                </div>
+
+                <div>
+                  <span>
+                    <Icon type="users" size={17} />
+                  </span>
+                  <div>
+                    <strong>24/7 Support</strong>
+                    <small>We're always here</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="hero-visual">
+              <DashboardMockup />
+            </div>
+          </div>
+        </section>
+
+        <section className="feature-strip">
+          <div className="container feature-strip-inner">
+            {featureItems.map((item) => (
+              <div className="strip-item" key={item.number}>
+                <div className="strip-icon">
+                  <Icon type={item.icon} size={22} />
+                </div>
+
+                <div>
+                  <strong>{item.title}</strong>
+                  <p>{item.text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section id="packages" className="packages">
+          <div className="container">
+            <div className="packages-heading">
+              <div>
+                <span className="section-tag">OUR PACKAGES</span>
+                <h2>Choose the right plan for your center</h2>
+                <p>
+                  Flexible packages designed for centers of
+                  different sizes and operational needs.
+                </p>
+              </div>
+
+              <div className="billing-control">
+                <button
+                  className={billing === "monthly" ? "active" : ""}
+                  onClick={() => setBilling("monthly")}
+                >
+                  Monthly
+                </button>
+
+                <button
+                  className={billing === "yearly" ? "active" : ""}
+                  onClick={() => setBilling("yearly")}
+                >
+                  Yearly
+                </button>
+
+                <span>Save 20%</span>
+              </div>
+            </div>
+
+            <div className="pricing-grid">
+              {plans.map((plan) => (
+                <article
+                  className={`pricing-card ${
+                    plan.popular ? "popular" : ""
+                  }`}
+                  key={plan.name}
+                >
+                  {plan.popular && (
+                    <div className="popular-badge">
+                      Most Popular
+                    </div>
+                  )}
+
+                  <div className="plan-icon">
+                    <Icon
+                      type={
+                        plan.name === "Starter"
+                          ? "shield"
+                          : plan.name === "Business"
+                          ? "bolt"
+                          : plan.name === "Professional"
+                          ? "chart"
+                          : "users"
+                      }
+                      size={25}
+                    />
+                  </div>
+
+                  <h3>{plan.name}</h3>
+                  <p className="plan-subtitle">
+                    {plan.subtitle}
+                  </p>
+
+                  <div className="plan-price">
+                    {plan.custom ? (
+                      <strong>Custom</strong>
+                    ) : (
+                      <>
+                        <strong>
+                          {billing === "yearly"
+                            ? plan.yearly
+                            : plan.monthly}
+                        </strong>
+
+                        <small>
+                          {billing === "yearly"
+                            ? "/ year"
+                            : "/ month"}
+                        </small>
+                      </>
+                    )}
+                  </div>
+
+                  <div className="plan-line" />
+
+                  <ul>
+                    {plan.features.map((feature) => (
+                      <li key={feature}>
+                        <span>✓</span>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <button
+                    className="plan-button"
+                    onClick={() => scrollTo("booking")}
+                  >
+                    {plan.custom ? "Contact Us" : "Get Started"}
+                  </button>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="about" className="about">
+          <div className="container about-inner">
+            <div className="about-copy">
+              <span className="section-tag">ABOUT CENTEROS</span>
+
+              <h2>
+                Built to make center
+                <br />
+                management simpler.
+              </h2>
+
+              <p>
+                CenterOS is designed around the real daily workflow
+                of educational centers. From student registration
+                to attendance, classes, payments and reports,
+                everything stays connected in one organized
+                platform.
+              </p>
+
+              <div className="about-points">
+                <div>
+                  <span>
+                    <Icon type="users" size={19} />
+                  </span>
+                  <div>
+                    <strong>One platform</strong>
+                    <small>Everything in one place</small>
+                  </div>
+                </div>
+
+                <div>
+                  <span>
+                    <Icon type="chart" size={19} />
+                  </span>
+                  <div>
+                    <strong>Growing centers</strong>
+                    <small>Built for your future</small>
+                  </div>
+                </div>
+
+                <div>
+                  <span>
+                    <Icon type="shield" size={19} />
+                  </span>
+                  <div>
+                    <strong>Secure & professional</strong>
+                    <small>Your data, our priority</small>
+                  </div>
+                </div>
+
+                <div>
+                  <span>
+                    <Icon type="bolt" size={19} />
+                  </span>
+                  <div>
+                    <strong>Easy to use</strong>
+                    <small>For your whole team</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="about-devices">
+              <div className="device-glow" />
+
+              <div className="laptop">
+                <div className="laptop-screen">
+                  <DashboardMockup />
+                </div>
+                <div className="laptop-base" />
+              </div>
+
+              <div className="phone">
+                <div className="phone-top" />
+                <img src="/newlogo.png" alt="" />
+                <strong>CenterOS</strong>
+                <div className="phone-item active">
+                  Overview
+                </div>
+                <div className="phone-item">Students</div>
+                <div className="phone-item">Teachers</div>
+                <div className="phone-item">Courses</div>
+                <div className="phone-item">Attendance</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="booking" className="booking">
+          <div className="container booking-card">
+            <div className="booking-copy">
+              <span className="section-tag">GET STARTED</span>
+
+              <h2>Ready to manage your center smarter?</h2>
+
+              <p>
+                Tell us a little about your center and our team
+                will contact you to discuss the best CenterOS
+                package for your needs.
+              </p>
+            </div>
+
+            <div className="booking-details">
+              <div className="booking-detail">
+                <span>
+                  <Icon type="globe" size={19} />
+                </span>
+                <div>
+                  <small>Email</small>
+                  <strong>centeros@centeros.online</strong>
+                </div>
+              </div>
+
+              <div className="booking-detail">
+                <span>
+                  <Icon type="calendar" size={19} />
+                </span>
+                <div>
+                  <small>Response time</small>
+                  <strong>Usually within one business day</strong>
+                </div>
+              </div>
+
+              <button
+                className="booking-button"
+                onClick={() =>
+                  scrollTo("contact")
+                }
+              >
+                Book a Call
+                <b>→</b>
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer id="contact" className="footer">
+        <div className="container footer-inner">
+          <div className="footer-brand">
+            <div className="footer-logo">
+              <img src="/newlogo.png" alt="Course CenterOS" />
+              <span>
+                <strong>Course</strong>
+                <strong>CenterOS</strong>
+              </span>
+            </div>
+
+            <p>
+              Smarter Management
+              <span>•</span>
+              Brighter Future
+            </p>
+          </div>
+
+          <nav className="footer-nav">
+            <button onClick={() => scrollTo("home")}>
+              Home
+            </button>
+            <button onClick={() => scrollTo("packages")}>
+              Packages
+            </button>
+            <button onClick={() => scrollTo("about")}>
+              About
+            </button>
+            <button onClick={() => scrollTo("contact")}>
+              Contact
+            </button>
+          </nav>
+
+          <div className="footer-right">
+            <a href="mailto:centeros@centeros.online">
+              centeros@centeros.online
+            </a>
+
+            <span>© 2026 Course Center OS. All rights reserved.</span>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+export default PublicSite;
