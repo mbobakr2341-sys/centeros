@@ -1,890 +1,785 @@
 import { useEffect, useMemo, useState } from "react";
 import "./PublicSite.css";
 
-const launchAt = Date.now() + 90 * 24 * 60 * 60 * 1000;
+const WHATSAPP = "01109330703";
 
-const plans = {
-  monthly: [
-    {
-      key: "starter",
-      name: "Starter",
-      subtitle: "للأكاديميات والمراكز الصغيرة",
-      price: 100,
-      accent: "green",
-      features: [
-        "حتى 200 طالب",
-        "حتى 10 معلمين",
-        "حتى 15 كورس",
-        "فرع واحد",
-        "حتى 5 مستخدمين إداريين",
-        "إدارة الطلاب والمعلمين",
-        "إدارة الكورسات والحصص",
-        "الجداول والقاعات",
-        "الحضور والمدفوعات",
-        "التقارير الأساسية",
-        "دعم عبر البريد الإلكتروني",
-      ],
-    },
-    {
-      key: "business",
-      name: "Business",
-      subtitle: "للأكاديميات المتوسطة",
-      price: 120,
-      accent: "blue",
-      popular: true,
-      features: [
-        "حتى 500 طالب",
-        "حتى 30 معلم",
-        "كورسات غير محدودة",
-        "فرع واحد",
-        "حتى 15 مستخدم إداري",
-        "صلاحيات متقدمة",
-        "أدوار مخصصة",
-        "سجل النشاط",
-        "تقارير حضور متقدمة",
-        "تقارير مالية متقدمة",
-        "تحليلات الطلاب والحضور والإيرادات",
-        "إشعارات مستهدفة",
-        "دعم ذو أولوية",
-      ],
-    },
-    {
-      key: "professional",
-      name: "Professional",
-      subtitle: "للأكاديميات الكبيرة",
-      price: 170,
-      accent: "purple",
-      features: [
-        "حتى 1,500 طالب",
-        "معلمون غير محدودين",
-        "كورسات غير محدودة",
-        "حتى 3 فروع",
-        "مستخدمون إداريون غير محدودين",
-        "إدارة متعددة الفروع",
-        "مديرو الفروع",
-        "تقارير لكل فرع",
-        "مقارنة أداء الفروع",
-        "تحليلات متقدمة",
-        "صلاحيات على مستوى الفروع",
-        "API Access",
-        "تخصيص الهوية وبعض عناصر النظام",
-        "Onboarding Assistance",
-      ],
-    },
-    {
-      key: "enterprise",
-      name: "Enterprise",
-      subtitle: "للمؤسسات والأكاديميات الكبيرة",
-      price: null,
-      accent: "orange",
-      enterprise: true,
-      features: [
-        "عدد طلاب مخصص",
-        "فروع متعددة حسب العقد",
-        "White Label",
-        "هوية كاملة للمؤسسة",
-        "Custom Domain",
-        "Custom Workflows",
-        "Integrations",
-        "Advanced API",
-        "تقارير مخصصة",
-        "صلاحيات مخصصة",
-        "Data Migration",
-        "تدريب الموظفين",
-        "Dedicated Support",
-        "SLA",
-      ],
-    },
-  ],
-  yearly: [
-    {
-      key: "starter",
-      name: "Starter",
-      subtitle: "للأكاديميات والمراكز الصغيرة",
-      price: 999,
-      monthlyEquivalent: 83.25,
-      accent: "green",
-      features: [
-        "حتى 200 طالب",
-        "حتى 10 معلمين",
-        "حتى 15 كورس",
-        "فرع واحد",
-        "حتى 5 مستخدمين إداريين",
-        "إدارة الطلاب والمعلمين",
-        "إدارة الكورسات والحصص",
-        "الجداول والقاعات",
-        "الحضور والمدفوعات",
-        "التقارير الأساسية",
-        "دعم عبر البريد الإلكتروني",
-      ],
-    },
-    {
-      key: "business",
-      name: "Business",
-      subtitle: "للأكاديميات المتوسطة",
-      price: 1199,
-      monthlyEquivalent: 99.92,
-      accent: "blue",
-      popular: true,
-      features: [
-        "حتى 500 طالب",
-        "حتى 30 معلم",
-        "كورسات غير محدودة",
-        "فرع واحد",
-        "حتى 15 مستخدم إداري",
-        "صلاحيات متقدمة",
-        "أدوار مخصصة",
-        "سجل النشاط",
-        "تقارير حضور متقدمة",
-        "تقارير مالية متقدمة",
-        "تحليلات الطلاب والحضور والإيرادات",
-        "إشعارات مستهدفة",
-        "دعم ذو أولوية",
-      ],
-    },
-    {
-      key: "professional",
-      name: "Professional",
-      subtitle: "للأكاديميات الكبيرة",
-      price: 1699,
-      monthlyEquivalent: 141.58,
-      accent: "purple",
-      features: [
-        "حتى 1,500 طالب",
-        "معلمون غير محدودين",
-        "كورسات غير محدودة",
-        "حتى 3 فروع",
-        "مستخدمون إداريون غير محدودين",
-        "إدارة متعددة الفروع",
-        "مديرو الفروع",
-        "تقارير لكل فرع",
-        "مقارنة أداء الفروع",
-        "تحليلات متقدمة",
-        "صلاحيات على مستوى الفروع",
-        "API Access",
-        "تخصيص الهوية وبعض عناصر النظام",
-        "Onboarding Assistance",
-      ],
-    },
-    {
-      key: "enterprise",
-      name: "Enterprise",
-      subtitle: "للمؤسسات والأكاديميات الكبيرة",
-      price: null,
-      accent: "orange",
-      enterprise: true,
-      features: [
-        "عدد طلاب مخصص",
-        "فروع متعددة حسب العقد",
-        "White Label",
-        "هوية كاملة للمؤسسة",
-        "Custom Domain",
-        "Custom Workflows",
-        "Integrations",
-        "Advanced API",
-        "تقارير مخصصة",
-        "صلاحيات مخصصة",
-        "Data Migration",
-        "تدريب الموظفين",
-        "Dedicated Support",
-        "SLA",
-      ],
-    },
-  ],
-};
-
-const translations = {
+const copy = {
   ar: {
-    dir: "rtl",
-    nav: ["الرئيسية", "المميزات", "الأسعار", "عن النظام", "تواصل معنا"],
-    login: "دخول",
-    cta: "احجز مكانك الآن",
-    badge: "منصة إدارة أكاديميات متكاملة",
-    heroTitle1: "إدارة أكاديميتك",
-    heroTitle2: "بشكل أكثر احترافية",
+    nav: ["الرئيسية", "الباقات", "من نحن", "تواصل معنا"],
+    book: "احجز مكالمة",
+    badge: "إدارة تعليمية ذكية",
+    hero1: "أدر مركزك",
+    hero2: "بشكل أذكى مع",
+    hero3: "Course Center OS",
     heroText:
-      "CenterOS منصة حديثة لإدارة الطلاب، المعلمين، الدروس، الحضور، المدفوعات والتقارير في مكان واحد.",
-    heroPrimary: "احجز مكانك الآن",
-    heroSecondary: "اكتشف النظام",
-    launch: "الإطلاق الرسمي خلال",
+      "منصة متكاملة لإدارة الطلاب والمدرسين والكورسات والحصص والحضور والمدفوعات — كل شيء في مكان واحد.",
+    easy: "سهل الاستخدام",
+    secure: "آمن وموثوق",
+    support: "دعم على مدار الساعة",
+    features: [
+      ["إدارة متكاملة", "أدر كل شيء من الطلاب إلى المدفوعات في منصة واحدة قوية."],
+      ["وفر وقتك", "أتمت مهامك اليومية وركز على ما يهم فعلاً."],
+      ["ارفع الأداء", "احصل على رؤى واضحة واتخذ قرارات أفضل."],
+      ["طوّر مركزك", "مناسب للمدارس والمعاهد ومراكز التعليم بمختلف أحجامها."],
+    ],
+    packages: "باقاتنا",
+    packagesText: "اختر الباقة المناسبة لاحتياجاتك. باقات مرنة للمراكز بمختلف أحجامها.",
+    monthly: "شهري",
+    yearly: "سنوي",
+    save: "وفر 20%",
+    perMonth: "/شهر",
+    custom: "مخصص",
+    getStarted: "ابدأ الآن",
+    contactUs: "تواصل معنا",
+    students: "حتى 200 طالب",
+    students500: "حتى 500 طالب",
+    students1000: "حتى 1,000 طالب",
+    unlimited: "طلاب غير محدودين",
+    launch: "إطلاق الموقع خلال",
     days: "يوم",
     hours: "ساعة",
     minutes: "دقيقة",
     seconds: "ثانية",
-    why: "لماذا تختار CenterOS؟",
-    whyText: "كل الأدوات التي تحتاجها لإدارة يومك بشكل أسرع وأكثر دقة.",
-    features: [
-      ["01", "إدارة مركزية", "إدارة الطلاب والمعلمين والكورسات والحصص من منصة واحدة."],
-      ["02", "حضور ومتابعة", "سجل الحضور والغياب والتأخير وتابع أداء الطلاب بسهولة."],
-      ["03", "مدفوعات وتقارير", "تابع المدفوعات والمبالغ المتبقية والتقارير المالية."],
-      ["04", "تحليلات واضحة", "بيانات منظمة تساعد الإدارة على اتخاذ قرارات أفضل."],
-      ["05", "صلاحيات متقدمة", "تحكم في صلاحيات الموظفين والأدوار حسب احتياج المؤسسة."],
-      ["06", "متعدد الفروع", "إدارة الفروع والبيانات والأداء من مكان واحد في الخطط المناسبة."],
-    ],
-    pricing: "خطط مرنة تناسب احتياجاتك",
-    pricingText: "اختر الخطة المناسبة لحجم الأكاديمية وطريقة إدارتها.",
-    monthly: "شهري",
-    yearly: "سنوي",
-    save: "وفر مع الدفع السنوي",
-    month: "شهر",
-    year: "سنة",
-    contact: "تواصل معنا",
-    enterprisePrice: "تواصل معنا",
-    choose: "اختر الخطة",
-    enterpriseCta: "تحدث مع فريقنا",
-    about: "عن CenterOS",
-    aboutText:
-      "صُمم CenterOS ليجمع العمليات اليومية للأكاديميات والمراكز التعليمية في تجربة واحدة واضحة، مع قابلية للتوسع حسب حجم المؤسسة.",
-    booking: "احجز مكانك الآن",
-    bookingText:
-      "سجّل بياناتك وسيتواصل معك فريق CenterOS لمناقشة احتياجات الأكاديمية.",
-    name: "الاسم الكامل",
-    academy: "اسم الأكاديمية / المركز",
+    callTitle: "احجز مكالمة",
+    callText: "حدد موعدًا مع فريقنا وتعرف على كل ما يمكنك فعله باستخدام CenterOS.",
+    bookNow: "احجز الآن",
+    whatsappTitle: "تواصل معنا على WhatsApp",
+    whatsappText: "احصل على دعم سريع وإجابات مباشرة عن أسئلتك.",
+    chatNow: "ابدأ المحادثة",
+    language: "اختار اللغة",
+    sendInfo: "إرسال معلومات",
+    formTitle: "احجز مكالمتك",
+    formText: "املأ البيانات وسيتواصل معك فريق CenterOS.",
+    manager: "اسم المسؤول",
+    center: "اسم المركز / الأكاديمية",
     email: "البريد الإلكتروني",
     branches: "عدد الفروع",
-    students: "عدد الطلاب المتوقع",
-    notes: "معلومات إضافية",
-    send: "إرسال الطلب",
-    footer: "منصة إدارة متكاملة للأكاديميات",
-    emailLabel: "البريد الرسمي",
-    success: "تم استلام طلبك بنجاح.",
+    expectedStudents: "عدد الطلاب المتوقع",
+    additional: "معلومات إضافية",
+    submit: "إرسال الطلب",
+    submitting: "جارٍ الإرسال...",
+    close: "إغلاق",
+    success: "تم إرسال طلبك بنجاح.",
+    successText: "سنراجع بياناتك ونتواصل معك قريبًا.",
+    error: "حدث خطأ أثناء إرسال الطلب. يمكنك التواصل معنا مباشرة على",
+    required: "من فضلك أكمل البيانات المطلوبة.",
+    footer: "إدارة أذكى • تعليم أفضل • نمو أسرع",
+    rights: "جميع الحقوق محفوظة.",
+    demoStudents: "الطلاب",
+    demoTeachers: "المدرسون",
+    demoCourses: "الكورسات",
+    demoAttendance: "الحضور",
+    demoPayments: "المدفوعات",
+    demoStudentCount: "1,248",
   },
   en: {
-    dir: "ltr",
-    nav: ["Home", "Features", "Pricing", "About", "Contact"],
-    login: "Login",
-    cta: "Book Your Spot",
-    badge: "Complete Academy Management Platform",
-    heroTitle1: "Manage Your Academy",
-    heroTitle2: "More Professionally",
+    nav: ["Home", "Packages", "About", "Contact"],
+    book: "Book a Call",
+    badge: "Smart Education Management",
+    hero1: "Manage Your Center",
+    hero2: "Smarter with",
+    hero3: "Course Center OS",
     heroText:
-      "CenterOS brings students, teachers, classes, attendance, payments and reports together in one modern platform.",
-    heroPrimary: "Book Your Spot",
-    heroSecondary: "Explore the Platform",
-    launch: "Official launch in",
+      "The all-in-one platform to manage students, teachers, courses, classes, attendance, payments and more — all in one place.",
+    easy: "Easy to Use",
+    secure: "Secure & Reliable",
+    support: "24/7 Support",
+    features: [
+      ["Complete Management", "Handle everything from students to payments in one powerful platform."],
+      ["Save Time", "Automate your daily tasks and focus on what matters."],
+      ["Boost Performance", "Get real-time insights and make better decisions."],
+      ["Grow Your Center", "Built for schools, institutes and learning centers of all sizes."],
+    ],
+    packages: "Our Packages",
+    packagesText: "Choose the plan that fits your needs. We offer flexible packages for centers of all sizes.",
+    monthly: "Monthly",
+    yearly: "Yearly",
+    save: "Save 20%",
+    perMonth: "/month",
+    custom: "Custom",
+    getStarted: "Get Started",
+    contactUs: "Contact Us",
+    students: "Up to 200 students",
+    students500: "Up to 500 students",
+    students1000: "Up to 1,000 students",
+    unlimited: "Unlimited students",
+    launch: "Website Launching In",
     days: "Days",
     hours: "Hours",
     minutes: "Minutes",
     seconds: "Seconds",
-    why: "Why Choose CenterOS?",
-    whyText: "Everything your academy needs to operate faster and with greater clarity.",
-    features: [
-      ["01", "Centralized Management", "Manage students, teachers, courses and classes from one platform."],
-      ["02", "Attendance", "Track attendance, absence and lateness with clear history."],
-      ["03", "Payments & Reports", "Track payments, balances and financial reporting."],
-      ["04", "Clear Analytics", "Organized data that helps management make better decisions."],
-      ["05", "Advanced Permissions", "Control employee roles and permissions across your organization."],
-      ["06", "Multi-Branch", "Manage branches, data and performance from one place."],
-    ],
-    pricing: "Plans That Fit Your Academy",
-    pricingText: "Choose the plan that matches your academy size and workflow.",
-    monthly: "Monthly",
-    yearly: "Yearly",
-    save: "Save with annual billing",
-    month: "month",
-    year: "year",
-    contact: "Contact Us",
-    enterprisePrice: "Contact Us",
-    choose: "Choose Plan",
-    enterpriseCta: "Talk to Our Team",
-    about: "About CenterOS",
-    aboutText:
-      "CenterOS brings everyday academy operations into one clear experience designed to scale with your organization.",
-    booking: "Book Your Spot",
-    bookingText: "Send your details and our team will contact you to discuss your academy.",
-    name: "Full Name",
-    academy: "Academy / Center Name",
-    email: "Email",
+    callTitle: "Book a Call",
+    callText: "Schedule a call with our team and discover everything CenterOS can do for your center.",
+    bookNow: "Book Now",
+    whatsappTitle: "Chat on WhatsApp",
+    whatsappText: "Get instant support and quick answers to your questions.",
+    chatNow: "Chat Now",
+    language: "Choose Language",
+    sendInfo: "Send Information",
+    formTitle: "Book Your Call",
+    formText: "Fill in your details and the CenterOS team will contact you.",
+    manager: "Manager Name",
+    center: "Center / Academy Name",
+    email: "Email Address",
     branches: "Number of Branches",
-    students: "Expected Students",
-    notes: "Additional Information",
-    send: "Send Request",
-    footer: "Complete management platform for academies",
-    emailLabel: "Official Email",
-    success: "Your request has been received.",
+    expectedStudents: "Expected Number of Students",
+    additional: "Additional Information",
+    submit: "Send Request",
+    submitting: "Sending...",
+    close: "Close",
+    success: "Your request was sent successfully.",
+    successText: "We'll review your details and contact you soon.",
+    error: "Something went wrong. You can contact us directly at",
+    required: "Please complete the required fields.",
+    footer: "Smarter Management • Better Education • Faster Growth",
+    rights: "All rights reserved.",
+    demoStudents: "Students",
+    demoTeachers: "Teachers",
+    demoCourses: "Courses",
+    demoAttendance: "Attendance",
+    demoPayments: "Payments",
+    demoStudentCount: "1,248",
   },
   tr: {
-    dir: "ltr",
-    nav: ["Ana Sayfa", "Özellikler", "Fiyatlar", "Hakkımızda", "İletişim"],
-    login: "Giriş",
-    cta: "Yerini Ayırt",
-    badge: "Kapsamlı Akademi Yönetim Platformu",
-    heroTitle1: "Akademinizi",
-    heroTitle2: "Daha Profesyonel Yönetin",
+    nav: ["Ana Sayfa", "Paketler", "Hakkımızda", "İletişim"],
+    book: "Görüşme Ayarla",
+    badge: "Akıllı Eğitim Yönetimi",
+    hero1: "Merkezinizi",
+    hero2: "daha akıllı yönetin",
+    hero3: "Course Center OS",
     heroText:
-      "CenterOS; öğrenciler, öğretmenler, dersler, yoklama, ödemeler ve raporları tek modern platformda birleştirir.",
-    heroPrimary: "Yerini Ayırt",
-    heroSecondary: "Platformu Keşfet",
-    launch: "Resmi lansmana",
+      "Öğrencileri, öğretmenleri, kursları, dersleri, yoklamayı, ödemeleri ve daha fazlasını tek bir yerden yönetin.",
+    easy: "Kullanımı Kolay",
+    secure: "Güvenli ve Güvenilir",
+    support: "7/24 Destek",
+    features: [
+      ["Eksiksiz Yönetim", "Öğrencilerden ödemelere kadar her şeyi tek güçlü platformdan yönetin."],
+      ["Zamandan Tasarruf", "Günlük işlerinizi otomatikleştirin ve önemli konulara odaklanın."],
+      ["Performansı Artırın", "Gerçek zamanlı bilgilerle daha iyi kararlar alın."],
+      ["Merkezinizi Büyütün", "Her ölçekte okul, kurum ve eğitim merkezi için tasarlandı."],
+    ],
+    packages: "Paketlerimiz",
+    packagesText: "İhtiyacınıza uygun planı seçin. Her büyüklükteki merkez için esnek paketler.",
+    monthly: "Aylık",
+    yearly: "Yıllık",
+    save: "%20 Tasarruf",
+    perMonth: "/ay",
+    custom: "Özel",
+    getStarted: "Başlayın",
+    contactUs: "Bize Ulaşın",
+    students: "200 öğrenciye kadar",
+    students500: "500 öğrenciye kadar",
+    students1000: "1.000 öğrenciye kadar",
+    unlimited: "Sınırsız öğrenci",
+    launch: "Web Sitesi Açılışına",
     days: "Gün",
     hours: "Saat",
     minutes: "Dakika",
     seconds: "Saniye",
-    why: "Neden CenterOS?",
-    whyText: "Akademinizi daha hızlı ve düzenli yönetmek için ihtiyacınız olan araçlar.",
-    features: [
-      ["01", "Merkezi Yönetim", "Öğrenci, öğretmen, kurs ve dersleri tek platformdan yönetin."],
-      ["02", "Yoklama", "Katılım, devamsızlık ve geç kalma kayıtlarını kolayca takip edin."],
-      ["03", "Ödeme ve Raporlar", "Ödemeleri, kalan bakiyeleri ve finansal raporları takip edin."],
-      ["04", "Net Analizler", "Daha iyi kararlar için düzenli ve anlaşılır veriler."],
-      ["05", "Gelişmiş Yetkiler", "Çalışan rolleri ve izinlerini kurumunuza göre yönetin."],
-      ["06", "Çoklu Şube", "Uygun planlarla şubeleri, verileri ve performansı tek yerden yönetin."],
-    ],
-    pricing: "İhtiyacınıza Uygun Planlar",
-    pricingText: "Akademinizin büyüklüğüne ve çalışma şekline uygun planı seçin.",
-    monthly: "Aylık",
-    yearly: "Yıllık",
-    save: "Yıllık ödemede avantaj",
-    month: "ay",
-    year: "yıl",
-    contact: "İletişim",
-    enterprisePrice: "Bize Ulaşın",
-    choose: "Planı Seç",
-    enterpriseCta: "Ekibimizle Görüşün",
-    about: "CenterOS Hakkında",
-    aboutText:
-      "CenterOS, akademilerin günlük operasyonlarını tek ve anlaşılır bir deneyimde birleştirmek için tasarlanmıştır.",
-    booking: "Yerini Ayırt",
-    bookingText: "Bilgilerinizi gönderin, ekibimiz akademinizin ihtiyaçları için sizinle iletişime geçsin.",
-    name: "Ad Soyad",
-    academy: "Akademi / Merkez Adı",
+    callTitle: "Görüşme Ayarla",
+    callText: "Ekibimizle bir görüşme planlayın ve CenterOS'un merkezinize neler sunabileceğini keşfedin.",
+    bookNow: "Şimdi Ayarla",
+    whatsappTitle: "WhatsApp'tan Yazın",
+    whatsappText: "Anında destek ve hızlı cevaplar alın.",
+    chatNow: "Sohbete Başla",
+    language: "Dil Seçin",
+    sendInfo: "Bilgi Gönder",
+    formTitle: "Görüşme Ayarla",
+    formText: "Bilgilerinizi doldurun, CenterOS ekibi sizinle iletişime geçsin.",
+    manager: "Yönetici Adı",
+    center: "Merkez / Akademi Adı",
     email: "E-posta",
     branches: "Şube Sayısı",
-    students: "Tahmini Öğrenci Sayısı",
-    notes: "Ek Bilgiler",
-    send: "Talep Gönder",
-    footer: "Akademiler için kapsamlı yönetim platformu",
-    emailLabel: "Resmi E-posta",
-    success: "Talebiniz başarıyla alındı.",
+    expectedStudents: "Beklenen Öğrenci Sayısı",
+    additional: "Ek Bilgi",
+    submit: "Talep Gönder",
+    submitting: "Gönderiliyor...",
+    close: "Kapat",
+    success: "Talebiniz başarıyla gönderildi.",
+    successText: "Bilgilerinizi inceleyip kısa süre içinde sizinle iletişime geçeceğiz.",
+    error: "Bir hata oluştu. Bize doğrudan şu numaradan ulaşabilirsiniz:",
+    required: "Lütfen gerekli alanları doldurun.",
+    footer: "Daha Akıllı Yönetim • Daha İyi Eğitim • Daha Hızlı Büyüme",
+    rights: "Tüm hakları saklıdır.",
+    demoStudents: "Öğrenciler",
+    demoTeachers: "Öğretmenler",
+    demoCourses: "Kurslar",
+    demoAttendance: "Yoklama",
+    demoPayments: "Ödemeler",
+    demoStudentCount: "1.248",
   },
 };
 
-function Icon({ type }) {
-  const icons = {
-    shield: "◈",
-    chart: "▥",
-    users: "◌",
-    clock: "◷",
-    settings: "◫",
-    payments: "▣",
+const packages = {
+  ar: [
+    { name: "Basic", subtitle: "مثالي للمراكز الصغيرة", price: 29, items: ["حتى 200 طالب", "تقارير أساسية", "متابعة الحضور", "دعم البريد الإلكتروني"] },
+    { name: "Standard", subtitle: "مثالي للمراكز النامية", price: 59, popular: true, items: ["حتى 500 طالب", "تقارير متقدمة", "إدارة المدرسين", "متابعة المدفوعات", "دعم أولوية"] },
+    { name: "Pro", subtitle: "للمراكز والمؤسسات الكبيرة", price: 99, items: ["حتى 1,000 طالب", "كل المميزات", "دعم الفروع المتعددة", "تقارير مخصصة", "دعم 24/7"] },
+    { name: "Enterprise", subtitle: "مصمم حسب احتياجاتك", price: null, items: ["طلاب غير محدودين", "مدير حساب مخصص", "تكاملات مخصصة", "أمان متقدم", "حلول مصممة لك"] },
+  ],
+  en: [
+    { name: "Basic", subtitle: "Perfect for small centers", price: 29, items: ["Up to 200 students", "Basic reports", "Attendance tracking", "Email support"] },
+    { name: "Standard", subtitle: "Ideal for growing centers", price: 59, popular: true, items: ["Up to 500 students", "Advanced reports", "Teacher management", "Payment tracking", "Priority support"] },
+    { name: "Pro", subtitle: "For large centers & institutions", price: 99, items: ["Up to 1,000 students", "Full features access", "Multi-branch support", "Custom reports", "24/7 support"] },
+    { name: "Enterprise", subtitle: "Tailored for your needs", price: null, items: ["Unlimited students", "Dedicated account manager", "Custom integrations", "Advanced security", "Tailored solutions"] },
+  ],
+  tr: [
+    { name: "Basic", subtitle: "Küçük merkezler için", price: 29, items: ["200 öğrenciye kadar", "Temel raporlar", "Yoklama takibi", "E-posta desteği"] },
+    { name: "Standard", subtitle: "Büyüyen merkezler için", price: 59, popular: true, items: ["500 öğrenciye kadar", "Gelişmiş raporlar", "Öğretmen yönetimi", "Ödeme takibi", "Öncelikli destek"] },
+    { name: "Pro", subtitle: "Büyük merkezler için", price: 99, items: ["1.000 öğrenciye kadar", "Tüm özellikler", "Çoklu şube desteği", "Özel raporlar", "7/24 destek"] },
+    { name: "Enterprise", subtitle: "İhtiyaçlarınıza özel", price: null, items: ["Sınırsız öğrenci", "Özel hesap yöneticisi", "Özel entegrasyonlar", "Gelişmiş güvenlik", "Özel çözümler"] },
+  ],
+};
+
+function Icon({ name, size = 20 }) {
+  const p = {
+    width: size,
+    height: size,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.8,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": true,
   };
 
-  return <span className="feature-icon">{icons[type] || "•"}</span>;
+  const paths = {
+    globe: <><circle cx="12" cy="12" r="9" /><path d="M3 12h18" /><path d="M12 3c2.5 2.7 3.5 5.7 3.5 9S14.5 18.3 12 21" /><path d="M12 3c-2.5 2.7-3.5 5.7-3.5 9S9.5 18.3 12 21" /></>,
+    moon: <path d="M20.5 15.3A8.5 8.5 0 0 1 8.7 3.5 8.5 8.5 0 1 0 20.5 15.3Z" />,
+    menu: <><path d="M4 7h16" /><path d="M4 12h16" /><path d="M4 17h16" /></>,
+    x: <><path d="M6 6l12 12" /><path d="M18 6L6 18" /></>,
+    arrow: <><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></>,
+    check: <path d="m5 12 4 4L19 6" />,
+    shield: <path d="M12 3 19 6v5c0 4.6-2.9 8.5-7 10-4.1-1.5-7-5.4-7-10V6l7-3Z" />,
+    bolt: <path d="m13 2-9 12h7l-1 8 9-12h-7l1-8Z" />,
+    chart: <><path d="M4 19V5" /><path d="M4 19h16" /><path d="m7 15 3-4 3 2 5-7" /></>,
+    users: <><path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" /><circle cx="9.5" cy="7" r="4" /><path d="M17 11a4 4 0 0 0 0-8" /><path d="M21 21v-2a4 4 0 0 0-3-3.9" /></>,
+    calendar: <><rect x="3" y="4" width="18" height="17" rx="3" /><path d="M16 2v4M8 2v4M3 9h18" /></>,
+    book: <><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v17H6.5A2.5 2.5 0 0 0 4 22V5.5Z" /><path d="M4 5.5V20" /></>,
+    payment: <><rect x="3" y="5" width="18" height="14" rx="3" /><path d="M3 10h18" /><path d="M7 15h4" /></>,
+    building: <><path d="M4 21V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v17" /><path d="M8 6h2M14 6h2M8 10h2M14 10h2M8 14h2M14 14h2M10 21v-4h4v4" /></>,
+    whatsapp: <><path d="M20 11.5a8 8 0 0 1-11.8 7L4 20l1.5-4.1A8 8 0 1 1 20 11.5Z" /><path d="M8.5 8.5c.3 2.2 2.2 4.2 4.5 5 .6.2 1.2-.1 1.5-.7l.3-.6-1.5-.9-.5.6c-.8-.3-1.5-.8-2-1.5l.5-.6-.8-1.5-.7.2c-.7.1-1.4-.2-1.3 0Z" /></>,
+  };
+
+  return <svg {...p}>{paths[name] || paths.chart}</svg>;
 }
 
-function DashboardMockup() {
-  const [active, setActive] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActive((value) => (value + 1) % 4);
-    }, 2600);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  const values = [142, 178, 164, 216];
-
+function DemoDashboard({ t }) {
   return (
-    <div className="dashboard-stage">
-      <div className="dashboard-glow" />
+    <div className="demo-wrap">
+      <div className="demo-orb demo-orb-one" />
+      <div className="demo-orb demo-orb-two" />
 
-      <div className="dashboard-window">
-        <div className="dashboard-topbar">
-          <div className="brand-mini">
-            <img src="/logo.png" alt="CenterOS" />
-            <strong>CenterOS</strong>
-          </div>
-
-          <div className="top-actions">
-            <span />
-            <span />
-            <b>Admin</b>
-          </div>
+      <div className="demo-floating demo-student-float">
+        <div className="demo-icon purple"><Icon name="users" size={18} /></div>
+        <div>
+          <small>{t.demoStudents}</small>
+          <strong>{t.demoStudentCount}</strong>
         </div>
-
-        <div className="dashboard-body">
-          <aside className="dashboard-sidebar">
-            <div className="side-active">الرئيسية</div>
-            <div>الطلاب</div>
-            <div>المعلمون</div>
-            <div>الدروس</div>
-            <div>الحضور</div>
-            <div>المدفوعات</div>
-            <div>التقارير</div>
-            <div>الإعدادات</div>
-          </aside>
-
-          <main className="dashboard-content">
-            <div className="dashboard-welcome">
-              <div>
-                <small>لوحة الإدارة</small>
-                <h3>مرحباً بك في CenterOS</h3>
-                <p>نظرة سريعة على أداء الأكاديمية</p>
-              </div>
-              <div className="mock-date">هذا الأسبوع</div>
-            </div>
-
-            <div className="dashboard-stats">
-              <div>
-                <small>الطلاب</small>
-                <strong>{values[active]}</strong>
-                <em>+8.4%</em>
-              </div>
-              <div>
-                <small>المعلمون</small>
-                <strong>32</strong>
-                <em>+4.2%</em>
-              </div>
-              <div>
-                <small>الحضور</small>
-                <strong>86%</strong>
-                <em>+6.1%</em>
-              </div>
-              <div>
-                <small>الإيرادات</small>
-                <strong>$12.8K</strong>
-                <em>+11.2%</em>
-              </div>
-            </div>
-
-            <div className="dashboard-grid">
-              <div className="mock-chart">
-                <div className="mock-heading">
-                  <strong>نظرة على الحضور</strong>
-                  <span>آخر 7 أيام</span>
-                </div>
-
-                <div className="chart-area">
-                  <div className="chart-line">
-                    <i />
-                    <i />
-                    <i />
-                    <i />
-                    <i />
-                    <i />
-                    <i />
-                  </div>
-                </div>
-              </div>
-
-              <div className="mock-list">
-                <strong>آخر الأنشطة</strong>
-                <div>
-                  <span className="activity-dot" />
-                  <p>تم تسجيل حضور مجموعة جديدة</p>
-                  <small>منذ 5 دقائق</small>
-                </div>
-                <div>
-                  <span className="activity-dot" />
-                  <p>تم تسجيل دفعة جديدة</p>
-                  <small>منذ 18 دقيقة</small>
-                </div>
-                <div>
-                  <span className="activity-dot" />
-                  <p>تم إضافة حصة جديدة</p>
-                  <small>منذ 32 دقيقة</small>
-                </div>
-              </div>
-            </div>
-          </main>
-        </div>
+        <span className="demo-up">↑ 12%</span>
       </div>
 
-      <div className="floating-card floating-one">
-        <small>نسبة الحضور</small>
-        <strong>86%</strong>
-        <div className="mini-progress">
-          <i />
+      <div className="demo-building">
+        <div className="building-sky" />
+        <div className="building-main">
+          <div className="building-glass">
+            {Array.from({ length: 20 }).map((_, i) => <span key={i} />)}
+          </div>
+          <div className="building-side" />
+          <div className="building-door" />
         </div>
+        <div className="building-trees tree-one" />
+        <div className="building-trees tree-two" />
+        <div className="building-trees tree-three" />
       </div>
 
-      <div className="floating-card floating-two">
-        <small>الإيرادات</small>
-        <strong>$12,840</strong>
-        <span>+11.2%</span>
+      <div className="demo-label demo-label-top">Better Education<br />Brighter Future</div>
+
+      <div className="demo-side-list">
+        {[
+          ["users", t.demoStudents],
+          ["users", t.demoTeachers],
+          ["book", t.demoCourses],
+          ["chart", t.demoAttendance],
+          ["payment", t.demoPayments],
+        ].map(([icon, label]) => (
+          <div key={label}><Icon name={icon} size={15} /><span>{label}</span></div>
+        ))}
+      </div>
+
+      <div className="demo-chart">
+        <div className="demo-chart-line">
+          <span /><span /><span /><span /><span /><span />
+        </div>
       </div>
     </div>
   );
 }
 
-function Countdown({ t }) {
-  const [remaining, setRemaining] = useState(() => Math.max(0, launchAt - Date.now()));
+function BookingModal({ language, t, onClose }) {
+  const [form, setForm] = useState({
+    managerName: "",
+    centerName: "",
+    email: "",
+    branches: "",
+    students: "",
+    additionalInfo: "",
+  });
+  const [status, setStatus] = useState("idle");
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setRemaining(Math.max(0, launchAt - Date.now()));
-    }, 1000);
+  const studentsOptions = [
+    "حتى 100 طالب",
+    "حتى 200 طالب",
+    "حتى 300 طالب",
+    "حتى 400 طالب",
+    "حتى 500 طالب",
+    "أكثر من 500 طالب",
+  ];
 
-    return () => clearInterval(timer);
-  }, []);
+  const update = (key, value) => setForm((prev) => ({ ...prev, [key]: value }));
 
-  const time = useMemo(() => {
-    const total = Math.floor(remaining / 1000);
+  const submit = async (e) => {
+    e.preventDefault();
 
-    return {
-      days: Math.floor(total / 86400),
-      hours: Math.floor((total % 86400) / 3600),
-      minutes: Math.floor((total % 3600) / 60),
-      seconds: total % 60,
-    };
-  }, [remaining]);
+    if (!form.managerName || !form.centerName || !form.email || !form.branches || !form.students) {
+      setStatus("required");
+      return;
+    }
+
+    setStatus("loading");
+
+    try {
+      const response = await fetch("/api/booking", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.managerName,
+          managerName: form.managerName,
+          center: form.centerName,
+          centerName: form.centerName,
+          email: form.email,
+          branches: form.branches,
+          students: form.students,
+          additionalInfo: form.additionalInfo,
+          language,
+        }),
+      });
+
+      if (!response.ok) throw new Error("booking_failed");
+
+      setStatus("success");
+    } catch {
+      setStatus("error");
+    }
+  };
+
+  const whatsappText = encodeURIComponent(
+    `${t.bookNow} - ${form.centerName || "CenterOS"}\n${form.managerName || ""}\n${form.email || ""}`
+  );
 
   return (
-    <div className="launch-card">
-      <div className="launch-title">{t.launch}</div>
+    <div className="modal-backdrop" onMouseDown={onClose}>
+      <div className="booking-modal" onMouseDown={(e) => e.stopPropagation()}>
+        <button className="modal-close" onClick={onClose} aria-label={t.close}>
+          <Icon name="x" size={20} />
+        </button>
 
-      <div className="countdown">
-        {[
-          [time.days, t.days],
-          [time.hours, t.hours],
-          [time.minutes, t.minutes],
-          [time.seconds, t.seconds],
-        ].map(([value, label]) => (
-          <div className="time-box" key={label}>
-            <strong>{String(value).padStart(2, "0")}</strong>
-            <span>{label}</span>
+        {status === "success" ? (
+          <div className="modal-result">
+            <div className="result-icon"><Icon name="check" size={30} /></div>
+            <h2>{t.success}</h2>
+            <p>{t.successText}</p>
+            <a
+              className="gradient-btn"
+              href={`https://wa.me/20${WHATSAPP.slice(1)}?text=${whatsappText}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {t.chatNow}
+              <Icon name="arrow" size={17} />
+            </a>
           </div>
-        ))}
+        ) : (
+          <>
+            <div className="modal-heading">
+              <span className="eyebrow">{t.book}</span>
+              <h2>{t.formTitle}</h2>
+              <p>{t.formText}</p>
+            </div>
+
+            {status === "required" && <div className="form-message warning">{t.required}</div>}
+            {status === "error" && (
+              <div className="form-message error">
+                {t.error}{" "}
+                <a href={`tel:${WHATSAPP}`}>{WHATSAPP}</a>
+              </div>
+            )}
+
+            <form onSubmit={submit} className="booking-form">
+              <div className="form-grid">
+                <label>
+                  <span>{t.manager}</span>
+                  <input value={form.managerName} onChange={(e) => update("managerName", e.target.value)} required />
+                </label>
+
+                <label>
+                  <span>{t.center}</span>
+                  <input value={form.centerName} onChange={(e) => update("centerName", e.target.value)} required />
+                </label>
+
+                <label>
+                  <span>{t.email}</span>
+                  <input type="email" value={form.email} onChange={(e) => update("email", e.target.value)} required />
+                </label>
+
+                <label>
+                  <span>{t.branches}</span>
+                  <select value={form.branches} onChange={(e) => update("branches", e.target.value)} required>
+                    <option value="">—</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4+</option>
+                  </select>
+                </label>
+
+                <label>
+                  <span>{t.expectedStudents}</span>
+                  <select value={form.students} onChange={(e) => update("students", e.target.value)} required>
+                    <option value="">—</option>
+                    {studentsOptions.map((option) => <option key={option} value={option}>{option}</option>)}
+                  </select>
+                </label>
+
+                <label className="full-field">
+                  <span>{t.additional}</span>
+                  <textarea rows="4" value={form.additionalInfo} onChange={(e) => update("additionalInfo", e.target.value)} />
+                </label>
+              </div>
+
+              <button className="gradient-btn form-submit" disabled={status === "loading"}>
+                {status === "loading" ? t.submitting : t.submit}
+                <Icon name="arrow" size={17} />
+              </button>
+            </form>
+          </>
+        )}
       </div>
     </div>
   );
 }
 
 export default function PublicSite() {
-  const [lang, setLang] = useState("ar");
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [language, setLanguage] = useState("ar");
   const [billing, setBilling] = useState("monthly");
-  const [submitted, setSubmitted] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
 
-  const t = translations[lang];
-  const currentPlans = plans[billing];
+  const t = copy[language];
+  const isArabic = language === "ar";
+
+  const launchDate = useMemo(() => new Date("2026-12-04T00:00:00+03:00"), []);
+
+  const [timeLeft, setTimeLeft] = useState(() => {
+    const diff = Math.max(0, launchDate.getTime() - Date.now());
+    return {
+      days: Math.floor(diff / 86400000),
+      hours: Math.floor((diff / 3600000) % 24),
+      minutes: Math.floor((diff / 60000) % 60),
+      seconds: Math.floor((diff / 1000) % 60),
+    };
+  });
 
   useEffect(() => {
-    document.documentElement.lang = lang;
-    document.documentElement.dir = t.dir;
-  }, [lang, t.dir]);
+    document.documentElement.lang = language;
+    document.documentElement.dir = isArabic ? "rtl" : "ltr";
+  }, [language, isArabic]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const diff = Math.max(0, launchDate.getTime() - Date.now());
+      setTimeLeft({
+        days: Math.floor(diff / 86400000),
+        hours: Math.floor((diff / 3600000) % 24),
+        minutes: Math.floor((diff / 60000) % 60),
+        seconds: Math.floor((diff / 1000) % 60),
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [launchDate]);
 
   const scrollTo = (id) => {
     setMenuOpen(false);
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const submitBooking = (event) => {
-    event.preventDefault();
-    setSubmitted(true);
+  const priceFor = (item) => {
+    if (!item.price) return null;
+    return billing === "yearly" ? Math.round(item.price * 0.8) : item.price;
   };
 
   return (
-    <div className={`public-site lang-${lang}`}>
-      <div className="ambient ambient-one" />
-      <div className="ambient ambient-two" />
+    <main className={`public-site ${darkMode ? "public-dark" : ""}`}>
+      <div className="page-glow glow-a" />
+      <div className="page-glow glow-b" />
+      <div className="page-glow glow-c" />
 
-      <header className="site-header">
-        <div className="container header-inner">
-          <button className="brand" onClick={() => scrollTo("home")}>
-            <img src="/logo.png" alt="CenterOS" />
-            <span>CenterOS</span>
+      <header className="public-header">
+        <div className="header-inner">
+          <button className="brand" onClick={() => scrollTo("home")} aria-label="CenterOS">
+            <img src="/newlogo.png" alt="CenterOS" />
           </button>
 
-          <nav className={menuOpen ? "nav open" : "nav"}>
-            {t.nav.map((item, index) => {
-              const ids = ["home", "features", "pricing", "about", "contact"];
-              return (
-                <button key={item} onClick={() => scrollTo(ids[index])}>
-                  {item}
-                </button>
-              );
-            })}
+          <nav className={`main-nav ${menuOpen ? "open" : ""}`}>
+            {[
+              ["home", t.nav[0]],
+              ["packages", t.nav[1]],
+              ["about", t.nav[2]],
+              ["contact", t.nav[3]],
+            ].map(([id, label]) => (
+              <button key={id} onClick={() => scrollTo(id)}>{label}</button>
+            ))}
           </nav>
 
           <div className="header-actions">
-            <div className="language-switcher">
-              {["ar", "en", "tr"].map((code) => (
-                <button
-                  key={code}
-                  className={lang === code ? "active" : ""}
-                  onClick={() => setLang(code)}
-                >
-                  {code.toUpperCase()}
-                </button>
-              ))}
+            <div className="language-picker">
+              <Icon name="globe" size={16} />
+              <select value={language} onChange={(e) => setLanguage(e.target.value)} aria-label={t.language}>
+                <option value="ar">العربية</option>
+                <option value="en">English</option>
+                <option value="tr">Türkçe</option>
+              </select>
             </div>
 
-            <button className="login-button">{t.login}</button>
-            <button className="header-cta" onClick={() => scrollTo("contact")}>
-              {t.cta}
+            <button className="theme-btn" onClick={() => setDarkMode((v) => !v)} aria-label="Theme">
+              <Icon name="moon" size={17} />
+            </button>
+
+            <button className="header-book" onClick={() => setModalOpen(true)}>
+              <Icon name="calendar" size={16} />
+              {t.book}
+            </button>
+
+            <button className="mobile-menu" onClick={() => setMenuOpen((v) => !v)}>
+              <Icon name={menuOpen ? "x" : "menu"} size={21} />
             </button>
           </div>
-
-          <button
-            className="mobile-menu"
-            onClick={() => setMenuOpen((value) => !value)}
-            aria-label="Menu"
-          >
-            <span />
-            <span />
-            <span />
-          </button>
         </div>
       </header>
 
-      <main>
-        <section id="home" className="hero-section">
-          <div className="container hero-grid">
-            <div className="hero-copy">
-              <div className="hero-badge">{t.badge}</div>
-
-              <h1>
-                {t.heroTitle1}
-                <span>{t.heroTitle2}</span>
-              </h1>
-
-              <p>{t.heroText}</p>
-
-              <div className="hero-actions">
-                <button className="primary-button" onClick={() => scrollTo("contact")}>
-                  {t.heroPrimary}
-                </button>
-
-                <button className="secondary-button" onClick={() => scrollTo("features")}>
-                  {t.heroSecondary}
-                  <span>←</span>
-                </button>
-              </div>
-
-              <Countdown t={t} />
-
-              <div className="hero-trust">
-                <span>إدارة واضحة</span>
-                <span>بيانات منظمة</span>
-                <span>تجربة احترافية</span>
-              </div>
+      <section id="home" className="hero section-anchor">
+        <div className="hero-content">
+          <div className="hero-copy">
+            <div className="hero-badge">
+              <span className="badge-dot" />
+              {t.badge}
             </div>
 
-            <DashboardMockup />
-          </div>
-        </section>
+            <h1>
+              {t.hero1}
+              <br />
+              {t.hero2}
+              <br />
+              <strong>{t.hero3}</strong>
+            </h1>
 
-        <section id="features" className="section">
-          <div className="container">
-            <div className="section-heading">
-              <span>CenterOS</span>
-              <h2>{t.why}</h2>
-              <p>{t.whyText}</p>
-            </div>
+            <p>{t.heroText}</p>
 
-            <div className="features-grid">
-              {t.features.map(([number, title, text], index) => (
-                <article className="feature-card" key={number}>
-                  <div className="feature-number">{number}</div>
-                  <Icon
-                    type={
-                      ["shield", "users", "payments", "chart", "settings", "users"][index]
-                    }
-                  />
-                  <h3>{title}</h3>
-                  <p>{text}</p>
-                  <div className="card-line" />
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="pricing" className="section pricing-section">
-          <div className="container">
-            <div className="section-heading">
-              <span>Pricing</span>
-              <h2>{t.pricing}</h2>
-              <p>{t.pricingText}</p>
-            </div>
-
-            <div className="billing-switch">
-              <button
-                className={billing === "monthly" ? "active" : ""}
-                onClick={() => setBilling("monthly")}
-              >
-                {t.monthly}
-              </button>
-              <button
-                className={billing === "yearly" ? "active" : ""}
-                onClick={() => setBilling("yearly")}
-              >
-                {t.yearly}
-              </button>
-              <span>{t.save}</span>
-            </div>
-
-            <div className="pricing-grid">
-              {currentPlans.map((plan) => (
-                <article
-                  key={plan.key}
-                  className={`pricing-card ${plan.popular ? "popular" : ""} accent-${plan.accent}`}
-                >
-                  {plan.popular && <div className="popular-label">الأكثر طلباً</div>}
-
-                  <div className="pricing-head">
-                    <h3>{plan.name}</h3>
-                    <p>{plan.subtitle}</p>
-                  </div>
-
-                  {plan.enterprise ? (
-                    <div className="enterprise-price">{t.enterprisePrice}</div>
-                  ) : (
-                    <div className="price">
-                      <strong>${plan.price}</strong>
-                      <span>
-                        / {billing === "monthly" ? t.month : t.year}
-                      </span>
-                    </div>
-                  )}
-
-                  {billing === "yearly" && !plan.enterprise && (
-                    <div className="monthly-equivalent">
-                      ${plan.monthlyEquivalent.toFixed(2)} / {t.month}
-                    </div>
-                  )}
-
-                  <div className="pricing-divider" />
-
-                  <ul>
-                    {plan.features.map((feature) => (
-                      <li key={feature}>
-                        <span>✓</span>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <button
-                    className="plan-button"
-                    onClick={() => scrollTo("contact")}
-                  >
-                    {plan.enterprise ? t.enterpriseCta : t.choose}
-                  </button>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="about" className="section about-section">
-          <div className="container about-grid">
-            <div className="about-visual">
-              <div className="glass-panel">
-                <div className="panel-orb" />
-                <img src="/logo.png" alt="CenterOS" />
-                <strong>CenterOS</strong>
-                <span>Academy Management Platform</span>
-              </div>
-            </div>
-
-            <div className="about-copy">
-              <span>About</span>
-              <h2>{t.about}</h2>
-              <p>{t.aboutText}</p>
-
-              <div className="about-points">
-                <div>
-                  <strong>01</strong>
-                  <span>منصة واحدة لإدارة العمليات اليومية</span>
-                </div>
-                <div>
-                  <strong>02</strong>
-                  <span>قابلية للتوسع مع نمو الأكاديمية</span>
-                </div>
-                <div>
-                  <strong>03</strong>
-                  <span>تجربة واضحة للإدارة والموظفين</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="contact" className="section booking-section">
-          <div className="container booking-container">
-            <div className="booking-info">
-              <span>CenterOS</span>
-              <h2>{t.booking}</h2>
-              <p>{t.bookingText}</p>
-
-              <div className="contact-email">
-                <small>{t.emailLabel}</small>
-                <strong>centeros@centeros.online</strong>
-              </div>
-            </div>
-
-            <form className="booking-form" onSubmit={submitBooking}>
-              <div className="form-row">
-                <label>
-                  {t.name}
-                  <input required type="text" />
-                </label>
-
-                <label>
-                  {t.academy}
-                  <input required type="text" />
-                </label>
-              </div>
-
-              <div className="form-row">
-                <label>
-                  {t.email}
-                  <input required type="email" />
-                </label>
-
-                <label>
-                  {t.branches}
-                  <input required type="number" min="1" />
-                </label>
-              </div>
-
-              <label>
-                {t.students}
-                <input required type="number" min="1" />
-              </label>
-
-              <label>
-                {t.notes}
-                <textarea rows="4" />
-              </label>
-
-              {submitted && <div className="form-success">{t.success}</div>}
-
-              <button className="primary-button form-submit" type="submit">
-                {t.send}
-              </button>
-
-              <small className="form-note">
-                سيتم استخدام البيانات للتواصل معك بخصوص CenterOS فقط.
-              </small>
-            </form>
-          </div>
-        </section>
-      </main>
-
-      <footer className="site-footer">
-        <div className="container footer-inner">
-          <div className="footer-brand">
-            <img src="/logo.png" alt="CenterOS" />
-            <div>
-              <strong>CenterOS</strong>
-              <p>{t.footer}</p>
+            <div className="hero-points">
+              <span><i><Icon name="bolt" size={14} /></i>{t.easy}</span>
+              <span><i><Icon name="shield" size={14} /></i>{t.secure}</span>
+              <span><i><Icon name="users" size={14} /></i>{t.support}</span>
             </div>
           </div>
 
-          <div className="footer-email">
-            <span>{t.emailLabel}</span>
-            <strong>centeros@centeros.online</strong>
-          </div>
-
-          <div className="footer-copy">
-            © {new Date().getFullYear()} CenterOS
+          <div className="hero-visual">
+            <DemoDashboard t={t} />
           </div>
         </div>
+      </section>
+
+      <section id="about" className="features section-anchor">
+        <div className="features-grid">
+          {t.features.map(([title, text], index) => (
+            <article className="feature-card" key={title}>
+              <div className={`feature-icon icon-${index}`}>
+                <Icon name={["shield", "bolt", "chart", "users"][index]} size={21} />
+              </div>
+              <div>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section id="packages" className="packages-section section-anchor">
+        <div className="section-heading">
+          <div>
+            <span className="section-kicker">{isArabic ? "الخطط والأسعار" : language === "tr" ? "PLANLAR VE FİYATLAR" : "PLANS & PRICING"}</span>
+            <h2>{t.packages}</h2>
+            <p>{t.packagesText}</p>
+          </div>
+
+          <div className="billing-switch">
+            <button className={billing === "monthly" ? "active" : ""} onClick={() => setBilling("monthly")}>{t.monthly}</button>
+            <button className={billing === "yearly" ? "active" : ""} onClick={() => setBilling("yearly")}>{t.yearly}</button>
+            <span>{t.save}</span>
+          </div>
+        </div>
+
+        <div className="packages-grid">
+          {packages[language].map((item) => {
+            const price = priceFor(item);
+            return (
+              <article className={`price-card ${item.popular ? "popular" : ""}`} key={item.name}>
+                {item.popular && <div className="popular-label">{isArabic ? "الأكثر طلبًا" : language === "tr" ? "En Popüler" : "Most Popular"}</div>}
+
+                <div className="price-top">
+                  <div className="price-icon">
+                    <Icon name={item.name === "Basic" ? "shield" : item.name === "Standard" ? "bolt" : item.name === "Pro" ? "building" : "chart"} size={22} />
+                  </div>
+                  <div>
+                    <h3>{item.name}</h3>
+                    <p>{item.subtitle}</p>
+                  </div>
+                </div>
+
+                <div className="price">
+                  {price ? (
+                    <>
+                      <strong>${price}</strong>
+                      <span>{t.perMonth}</span>
+                    </>
+                  ) : (
+                    <strong className="custom-price">{t.custom}</strong>
+                  )}
+                </div>
+
+                <div className="price-divider" />
+
+                <ul>
+                  {item.items.map((feature) => (
+                    <li key={feature}><span><Icon name="check" size={13} /></span>{feature}</li>
+                  ))}
+                </ul>
+
+                <button className={item.popular ? "gradient-btn" : "outline-btn"} onClick={() => setModalOpen(true)}>
+                  {item.price ? t.getStarted : t.contactUs}
+                  <Icon name="arrow" size={16} />
+                </button>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="action-strip">
+        <div className="launch-card">
+          <div className="strip-icon"><Icon name="bolt" size={20} /></div>
+          <div className="strip-content">
+            <h3>{t.launch}</h3>
+            <div className="countdown">
+              {[
+                [timeLeft.days, t.days],
+                [timeLeft.hours, t.hours],
+                [timeLeft.minutes, t.minutes],
+                [timeLeft.seconds, t.seconds],
+              ].map(([value, label]) => (
+                <div key={label}><strong>{String(value).padStart(2, "0")}</strong><span>{label}</span></div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="action-card">
+          <div className="strip-icon"><Icon name="calendar" size={20} /></div>
+          <div>
+            <h3>{t.callTitle}</h3>
+            <p>{t.callText}</p>
+            <button className="gradient-btn small" onClick={() => setModalOpen(true)}>{t.bookNow}<Icon name="arrow" size={15} /></button>
+          </div>
+        </div>
+
+        <div className="action-card whatsapp-card">
+          <div className="strip-icon whatsapp-icon"><Icon name="whatsapp" size={21} /></div>
+          <div>
+            <h3>{t.whatsappTitle}</h3>
+            <p>{t.whatsappText}</p>
+            <a
+              className="whatsapp-btn"
+              href={`https://wa.me/20${WHATSAPP.slice(1)}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Icon name="whatsapp" size={16} />
+              {t.chatNow}
+            </a>
+          </div>
+        </div>
+
+        <div className="action-card language-card">
+          <div className="strip-icon"><Icon name="globe" size={20} /></div>
+          <div>
+            <h3>{t.language}</h3>
+            <div className="language-card-select">
+              <select value={language} onChange={(e) => setLanguage(e.target.value)}>
+                <option value="ar">العربية</option>
+                <option value="en">English</option>
+                <option value="tr">Türkçe</option>
+              </select>
+            </div>
+            <button className="soft-btn" onClick={() => setModalOpen(true)}>{t.sendInfo}</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" className="contact-section section-anchor">
+        <div className="contact-card">
+          <div>
+            <span className="section-kicker">{t.book}</span>
+            <h2>{t.formTitle}</h2>
+            <p>{t.formText}</p>
+          </div>
+          <button className="gradient-btn" onClick={() => setModalOpen(true)}>
+            {t.bookNow}
+            <Icon name="arrow" size={17} />
+          </button>
+        </div>
+      </section>
+
+      <footer className="public-footer">
+        <div className="footer-brand">
+          <img src="/newlogo.png" alt="CenterOS" />
+          <div>
+            <strong>Course CenterOS</strong>
+            <span>{t.footer}</span>
+          </div>
+        </div>
+
+        <div className="footer-links">
+          <button onClick={() => scrollTo("home")}>{t.nav[0]}</button>
+          <button onClick={() => scrollTo("packages")}>{t.nav[1]}</button>
+          <button onClick={() => scrollTo("about")}>{t.nav[2]}</button>
+          <button onClick={() => scrollTo("contact")}>{t.nav[3]}</button>
+        </div>
+
+        <div className="footer-copy">
+          <span>© {new Date().getFullYear()} CenterOS</span>
+          <span>{t.rights}</span>
+        </div>
       </footer>
-    </div>
+
+      {modalOpen && (
+        <BookingModal
+          language={language}
+          t={t}
+          onClose={() => setModalOpen(false)}
+        />
+      )}
+    </main>
   );
 }

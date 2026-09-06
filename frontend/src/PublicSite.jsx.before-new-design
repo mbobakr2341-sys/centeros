@@ -1,0 +1,895 @@
+import { useEffect, useMemo, useState } from "react";
+import "./PublicSite.css";
+
+const translations = {
+  ar: {
+    navHome: "الرئيسية",
+    navFeatures: "المميزات",
+    navPackages: "الباقات",
+    navContact: "تواصل معنا",
+    heroEyebrow: "Course Center Management System",
+    heroTitle: "إدارة مركزك أصبحت أذكى وأسهل",
+    heroText:
+      "CenterOS هو نظام متكامل لإدارة مراكز الكورسات والأكاديميات، يساعدك على إدارة الطلاب والمدرسين والحصص والحضور والمدفوعات من مكان واحد.",
+    startNow: "ابدأ الآن",
+    bookCall: "احجز مكالمة",
+    learnMore: "اكتشف المزيد",
+    featureTitle: "كل ما يحتاجه مركزك في مكان واحد",
+    featureText:
+      "أدوات احترافية مصممة لتسهيل الإدارة اليومية ومساعدتك على التركيز على تطوير مركزك.",
+    students: "إدارة الطلاب",
+    studentsText: "ملف كامل لكل طالب مع متابعة التسجيل والحضور والمدفوعات.",
+    teachers: "إدارة المدرسين",
+    teachersText: "تنظيم المدرسين والجداول والحصص بسهولة.",
+    attendance: "الحضور والمتابعة",
+    attendanceText: "متابعة حضور الطلاب ومعرفة الأداء بشكل واضح.",
+    payments: "المدفوعات والإيرادات",
+    paymentsText: "تابع المدفوعات والإيرادات والتقارير المالية.",
+    packages: "باقات CenterOS",
+    packagesText:
+      "اختر الباقة المناسبة لحجم مركزك ويمكنك الترقية في أي وقت.",
+    monthly: "شهري",
+    yearly: "سنوي",
+    basic: "Starter",
+    standard: "Business",
+    pro: "Professional",
+    enterprise: "Enterprise",
+    popular: "الأكثر اختياراً",
+    contactUs: "تواصل معنا",
+    bookTitle: "جاهز تبدأ؟",
+    bookText:
+      "احجز مكالمة مجانية معنا وسنشرح لك النظام ونساعدك في اختيار الباقة المناسبة.",
+    managerName: "اسم المسؤول",
+    centerName: "اسم المركز / الأكاديمية",
+    email: "البريد الإلكتروني",
+    branches: "عدد الفروع",
+    studentsCount: "عدد الطلاب المتوقع",
+    additionalInfo: "معلومات إضافية",
+    sendRequest: "إرسال الطلب",
+    sending: "جاري الإرسال...",
+    success: "تم إرسال طلبك بنجاح",
+    successText:
+      "شكراً لتواصلك معنا. يمكنك أيضاً التواصل معنا مباشرة عبر WhatsApp.",
+    whatsapp: "تواصل عبر WhatsApp",
+    footerText:
+      "نظام احترافي لإدارة مراكز الكورسات والأكاديميات.",
+    launch: "إطلاق الموقع خلال",
+    days: "يوم",
+    hours: "ساعة",
+    minutes: "دقيقة",
+    seconds: "ثانية",
+  },
+  en: {
+    navHome: "Home",
+    navFeatures: "Features",
+    navPackages: "Packages",
+    navContact: "Contact",
+    heroEyebrow: "Course Center Management System",
+    heroTitle: "Manage Your Center Smarter",
+    heroText:
+      "CenterOS is an all-in-one management system for course centers and academies. Manage students, teachers, classes, attendance and payments from one place.",
+    startNow: "Get Started",
+    bookCall: "Book a Call",
+    learnMore: "Learn More",
+    featureTitle: "Everything Your Center Needs",
+    featureText:
+      "Professional tools designed to simplify your daily operations and help you grow your center.",
+    students: "Student Management",
+    studentsText:
+      "Complete student profiles with registration, attendance and payment tracking.",
+    teachers: "Teacher Management",
+    teachersText:
+      "Organize teachers, schedules and classes with ease.",
+    attendance: "Attendance Tracking",
+    attendanceText:
+      "Track student attendance and performance clearly.",
+    payments: "Payments & Revenue",
+    paymentsText:
+      "Monitor payments, revenue and financial activity.",
+    packages: "CenterOS Packages",
+    packagesText:
+      "Choose the plan that fits your center and upgrade whenever you need.",
+    monthly: "Monthly",
+    yearly: "Yearly",
+    basic: "Starter",
+    standard: "Business",
+    pro: "Professional",
+    enterprise: "Enterprise",
+    popular: "Most Popular",
+    contactUs: "Contact Us",
+    bookTitle: "Ready to Get Started?",
+    bookText:
+      "Book a free call with us and we will walk you through CenterOS and help you choose the right plan.",
+    managerName: "Manager Name",
+    centerName: "Center / Academy Name",
+    email: "Email Address",
+    branches: "Number of Branches",
+    studentsCount: "Expected Number of Students",
+    additionalInfo: "Additional Information",
+    sendRequest: "Send Request",
+    sending: "Sending...",
+    success: "Request Sent Successfully",
+    successText:
+      "Thank you for contacting us. You can also reach us directly through WhatsApp.",
+    whatsapp: "Contact via WhatsApp",
+    footerText:
+      "Professional management system for course centers and academies.",
+    launch: "Website Launching In",
+    days: "Days",
+    hours: "Hours",
+    minutes: "Minutes",
+    seconds: "Seconds",
+  },
+  tr: {
+    navHome: "Ana Sayfa",
+    navFeatures: "Özellikler",
+    navPackages: "Paketler",
+    navContact: "İletişim",
+    heroEyebrow: "Course Center Management System",
+    heroTitle: "Merkezinizi Daha Akıllı Yönetin",
+    heroText:
+      "CenterOS, kurs merkezleri ve akademiler için öğrencileri, öğretmenleri, dersleri, yoklamayı ve ödemeleri tek bir yerden yönetmenizi sağlar.",
+    startNow: "Başlayın",
+    bookCall: "Görüşme Planla",
+    learnMore: "Daha Fazla",
+    featureTitle: "Merkezinizin İhtiyacı Olan Her Şey",
+    featureText:
+      "Günlük operasyonlarınızı kolaylaştırmak ve merkezinizi büyütmenize yardımcı olmak için tasarlanmış profesyonel araçlar.",
+    students: "Öğrenci Yönetimi",
+    studentsText:
+      "Kayıt, devam ve ödeme takibiyle eksiksiz öğrenci profilleri.",
+    teachers: "Öğretmen Yönetimi",
+    teachersText:
+      "Öğretmenleri, programları ve dersleri kolayca yönetin.",
+    attendance: "Yoklama Takibi",
+    attendanceText:
+      "Öğrenci devam durumunu ve performansını net şekilde takip edin.",
+    payments: "Ödemeler ve Gelir",
+    paymentsText:
+      "Ödemeleri, geliri ve finansal hareketleri takip edin.",
+    packages: "CenterOS Paketleri",
+    packagesText:
+      "Merkeziniz için uygun paketi seçin ve istediğiniz zaman yükseltin.",
+    monthly: "Aylık",
+    yearly: "Yıllık",
+    basic: "Starter",
+    standard: "Business",
+    pro: "Professional",
+    enterprise: "Enterprise",
+    popular: "En Çok Tercih Edilen",
+    contactUs: "İletişime Geç",
+    bookTitle: "Başlamaya Hazır mısınız?",
+    bookText:
+      "Ücretsiz bir görüşme planlayın. CenterOS'u anlatalım ve size uygun paketi birlikte seçelim.",
+    managerName: "Yetkili Adı",
+    centerName: "Merkez / Akademi Adı",
+    email: "E-posta",
+    branches: "Şube Sayısı",
+    studentsCount: "Tahmini Öğrenci Sayısı",
+    additionalInfo: "Ek Bilgiler",
+    sendRequest: "Talebi Gönder",
+    sending: "Gönderiliyor...",
+    success: "Talebiniz Başarıyla Gönderildi",
+    successText:
+      "Bizimle iletişime geçtiğiniz için teşekkürler. WhatsApp üzerinden de doğrudan ulaşabilirsiniz.",
+    whatsapp: "WhatsApp ile İletişim",
+    footerText:
+      "Kurs merkezleri ve akademiler için profesyonel yönetim sistemi.",
+    launch: "Website Launching In",
+    days: "Gün",
+    hours: "Saat",
+    minutes: "Dakika",
+    seconds: "Saniye",
+  },
+};
+
+const plans = [
+  {
+    key: "basic",
+    price: { monthly: 299, yearly: 2990 },
+    features: ["Student Management", "Attendance", "Basic Reports"],
+  },
+  {
+    key: "standard",
+    price: { monthly: 499, yearly: 4990 },
+    features: [
+      "Everything in Basic",
+      "Teacher Management",
+      "Payments",
+      "Advanced Reports",
+    ],
+  },
+  {
+    key: "pro",
+    price: { monthly: 799, yearly: 7990 },
+    popular: true,
+    features: [
+      "Everything in Standard",
+      "Multiple Branches",
+      "Advanced Analytics",
+      "Priority Support",
+    ],
+  },
+  {
+    key: "enterprise",
+    price: { monthly: null, yearly: null },
+    features: [
+      "Unlimited Centers",
+      "Custom Solutions",
+      "Dedicated Support",
+      "Custom Integrations",
+    ],
+  },
+];
+
+function AppMockup() {
+  return (
+    <div className="website-mockup">
+      <div className="mockup-topbar">
+        <div className="mockup-brand">
+          <img src="/newlogo.png" alt="CenterOS" />
+          <span>CenterOS</span>
+        </div>
+        <div className="mockup-actions">
+          <span />
+          <span />
+          <span />
+        </div>
+      </div>
+
+      <div className="mockup-body">
+        <aside className="mockup-sidebar">
+          <div className="mockup-side-active">Overview</div>
+          <div>Students</div>
+          <div>Teachers</div>
+          <div>Courses</div>
+          <div>Attendance</div>
+          <div>Payments</div>
+        </aside>
+
+        <div className="mockup-content">
+          <div className="mockup-heading">
+            <div>
+              <small>Welcome back</small>
+              <h3>Center Overview</h3>
+            </div>
+            <div className="mockup-date">Today</div>
+          </div>
+
+          <div className="mockup-stats">
+            <div>
+              <small>Students</small>
+              <strong>1,248</strong>
+              <em>+12.5%</em>
+            </div>
+            <div>
+              <small>Teachers</small>
+              <strong>42</strong>
+              <em>+4.2%</em>
+            </div>
+            <div>
+              <small>Classes</small>
+              <strong>86</strong>
+              <em>+8.1%</em>
+            </div>
+            <div>
+              <small>Revenue</small>
+              <strong>$18.4K</strong>
+              <em>+15.8%</em>
+            </div>
+          </div>
+
+          <div className="mockup-grid">
+            <div className="mockup-chart">
+              <div className="mockup-card-title">
+                <span>Revenue Overview</span>
+                <small>Last 6 months</small>
+              </div>
+              <div className="bars">
+                {[45, 62, 48, 74, 66, 92, 80, 96].map((h, i) => (
+                  <i key={i} style={{ height: `${h}%` }} />
+                ))}
+              </div>
+            </div>
+
+            <div className="mockup-list">
+              <div className="mockup-card-title">
+                <span>Recent Activity</span>
+              </div>
+              <div className="activity-row">
+                <b />
+                <span>New student registered</span>
+                <small>2m</small>
+              </div>
+              <div className="activity-row">
+                <b />
+                <span>Payment received</span>
+                <small>12m</small>
+              </div>
+              <div className="activity-row">
+                <b />
+                <span>Class completed</span>
+                <small>24m</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Countdown({ t }) {
+  const launchDate = useMemo(
+    () => new Date("2026-12-04T00:00:00+03:00"),
+    []
+  );
+
+  const [time, setTime] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+
+  useEffect(() => {
+    const update = () => {
+      const diff = Math.max(0, launchDate.getTime() - Date.now());
+      const totalSeconds = Math.floor(diff / 1000);
+
+      setTime({
+        days: Math.floor(totalSeconds / 86400),
+        hours: Math.floor((totalSeconds % 86400) / 3600),
+        minutes: Math.floor((totalSeconds % 3600) / 60),
+        seconds: totalSeconds % 60,
+      });
+    };
+
+    update();
+    const timer = setInterval(update, 1000);
+    return () => clearInterval(timer);
+  }, [launchDate]);
+
+  return (
+    <div className="countdown">
+      <div>
+        <strong>{String(time.days).padStart(2, "0")}</strong>
+        <span>{t.days}</span>
+      </div>
+      <div>
+        <strong>{String(time.hours).padStart(2, "0")}</strong>
+        <span>{t.hours}</span>
+      </div>
+      <div>
+        <strong>{String(time.minutes).padStart(2, "0")}</strong>
+        <span>{t.minutes}</span>
+      </div>
+      <div>
+        <strong>{String(time.seconds).padStart(2, "0")}</strong>
+        <span>{t.seconds}</span>
+      </div>
+    </div>
+  );
+}
+
+export default function PublicSite() {
+  const [language, setLanguage] = useState("ar");
+  const [billing, setBilling] = useState("monthly");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const [form, setForm] = useState({
+    managerName: "",
+    centerName: "",
+    email: "",
+    branches: "",
+    studentsCount: "",
+    additionalInfo: "",
+  });
+
+  const t = translations[language];
+
+  useEffect(() => {
+    document.documentElement.lang = language;
+    document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+  }, [language]);
+
+  const scrollTo = (id) => {
+    setMenuOpen(false);
+    document.getElementById(id)?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
+
+  const updateForm = (key, value) => {
+    setForm((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const submitBooking = async (e) => {
+    e.preventDefault();
+
+    if (sending) return;
+
+    setSending(true);
+
+    try {
+      const response = await fetch("/api/booking", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      if (!response.ok) {
+        throw new Error("Booking failed");
+      }
+
+      setSuccess(true);
+
+      const message = [
+        "CenterOS Booking",
+        `Manager: ${form.managerName}`,
+        `Center: ${form.centerName}`,
+        `Email: ${form.email}`,
+        `Branches: ${form.branches}`,
+        `Students: ${form.studentsCount}`,
+        `Info: ${form.additionalInfo || "-"}`,
+      ].join("\n");
+
+      window.open(
+        `https://wa.me/201109330703?text=${encodeURIComponent(message)}`,
+        "_blank"
+      );
+    } catch {
+      alert(
+        language === "ar"
+          ? "حصل خطأ أثناء إرسال الطلب. تواصل معنا على 01109330703"
+          : language === "tr"
+          ? "Talep gönderilirken bir hata oluştu. 01109330703 üzerinden iletişime geçin."
+          : "Something went wrong. Please contact us on 01109330703."
+      );
+    } finally {
+      setSending(false);
+    }
+  };
+
+  return (
+    <div className="public-site">
+      <div className="ambient ambient-one" />
+      <div className="ambient ambient-two" />
+
+      <header className="public-header">
+        <div className="header-inner">
+          <button
+            className="brand"
+            onClick={() => scrollTo("home")}
+            aria-label="CenterOS"
+          >
+            <img src="/newlogo.png" alt="CenterOS" />
+            <span>CenterOS</span>
+          </button>
+
+          <nav className={menuOpen ? "nav open" : "nav"}>
+            <button onClick={() => scrollTo("home")}>{t.navHome}</button>
+            <button onClick={() => scrollTo("features")}>
+              {t.navFeatures}
+            </button>
+            <button onClick={() => scrollTo("packages")}>
+              {t.navPackages}
+            </button>
+            <button onClick={() => scrollTo("contact")}>
+              {t.navContact}
+            </button>
+          </nav>
+
+          <div className="header-right">
+            <div className="language-switcher">
+              {["ar", "en", "tr"].map((lang) => (
+                <button
+                  key={lang}
+                  className={language === lang ? "active" : ""}
+                  onClick={() => setLanguage(lang)}
+                >
+                  {lang.toUpperCase()}
+                </button>
+              ))}
+            </div>
+
+            <button
+              className="header-cta"
+              onClick={() => scrollTo("contact")}
+            >
+              {t.bookCall}
+            </button>
+
+            <button
+              className="mobile-menu"
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-label="Menu"
+            >
+              <span />
+              <span />
+              <span />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section className="hero section" id="home">
+          <div className="hero-copy">
+            <div className="eyebrow">
+              <span />
+              {t.heroEyebrow}
+            </div>
+
+            <h1>{t.heroTitle}</h1>
+
+            <p>{t.heroText}</p>
+
+            <div className="hero-benefits">
+              <span>
+                <b>✓</b>
+                {language === "ar"
+                  ? "إدارة كاملة للمركز"
+                  : language === "tr"
+                  ? "Tam merkez yönetimi"
+                  : "Complete center management"}
+              </span>
+              <span>
+                <b>✓</b>
+                {language === "ar"
+                  ? "تقارير وتحليلات واضحة"
+                  : language === "tr"
+                  ? "Net raporlar ve analizler"
+                  : "Clear reports & analytics"}
+              </span>
+              <span>
+                <b>✓</b>
+                {language === "ar"
+                  ? "مصمم لينمو معك"
+                  : language === "tr"
+                  ? "Sizinle birlikte büyür"
+                  : "Built to scale with you"}
+              </span>
+            </div>
+
+            <div className="hero-actions">
+              <button
+                className="primary-button"
+                onClick={() => scrollTo("contact")}
+              >
+                {t.startNow}
+                <span>→</span>
+              </button>
+
+              <button
+                className="secondary-button"
+                onClick={() => scrollTo("features")}
+              >
+                {t.learnMore}
+              </button>
+            </div>
+          </div>
+
+          <div className="hero-visual">
+            <div className="visual-glow" />
+            <AppMockup />
+          </div>
+        </section>
+
+        <section className="features-section section" id="features">
+          <div className="section-heading">
+            <div className="eyebrow centered">
+              <span />
+              CenterOS
+              <span />
+            </div>
+            <h2>{t.featureTitle}</h2>
+            <p>{t.featureText}</p>
+          </div>
+
+          <div className="feature-grid">
+            <article className="feature-card">
+              <div className="feature-icon">01</div>
+              <h3>{t.students}</h3>
+              <p>{t.studentsText}</p>
+              <span className="feature-arrow">↗</span>
+            </article>
+
+            <article className="feature-card">
+              <div className="feature-icon">02</div>
+              <h3>{t.teachers}</h3>
+              <p>{t.teachersText}</p>
+              <span className="feature-arrow">↗</span>
+            </article>
+
+            <article className="feature-card">
+              <div className="feature-icon">03</div>
+              <h3>{t.attendance}</h3>
+              <p>{t.attendanceText}</p>
+              <span className="feature-arrow">↗</span>
+            </article>
+
+            <article className="feature-card">
+              <div className="feature-icon">04</div>
+              <h3>{t.payments}</h3>
+              <p>{t.paymentsText}</p>
+              <span className="feature-arrow">↗</span>
+            </article>
+          </div>
+        </section>
+
+        <section className="packages-section section" id="packages">
+          <div className="section-heading">
+            <div className="eyebrow centered">
+              <span />
+              PRICING
+              <span />
+            </div>
+            <h2>{t.packages}</h2>
+            <p>{t.packagesText}</p>
+
+            <div className="billing-toggle">
+              <button
+                className={billing === "monthly" ? "active" : ""}
+                onClick={() => setBilling("monthly")}
+              >
+                {t.monthly}
+              </button>
+              <button
+                className={billing === "yearly" ? "active" : ""}
+                onClick={() => setBilling("yearly")}
+              >
+                {t.yearly}
+              </button>
+            </div>
+          </div>
+
+          <div className="pricing-grid">
+            {plans.map((plan) => (
+              <article
+                className={`pricing-card ${plan.popular ? "popular" : ""}`}
+                key={plan.key}
+              >
+                {plan.popular && (
+                  <div className="popular-label">{t.popular}</div>
+                )}
+
+                <div className="pricing-top">
+                  <span className="plan-name">{t[plan.key]}</span>
+
+                  {plan.price[billing] ? (
+                    <div className="price">
+                      <strong>{plan.price[billing]}</strong>
+                      <small>
+                        EGP / {billing === "monthly" ? t.monthly : t.yearly}
+                      </small>
+                    </div>
+                  ) : (
+                    <div className="custom-price">Custom</div>
+                  )}
+                </div>
+
+                <div className="pricing-line" />
+
+                <ul>
+                  {plan.features.map((feature) => (
+                    <li key={feature}>
+                      <b>✓</b>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+
+                <button
+                  className="plan-button"
+                  onClick={() => scrollTo("contact")}
+                >
+                  {plan.key === "enterprise" ? t.contactUs : t.startNow}
+                  <span>→</span>
+                </button>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="launch-section section">
+          <div className="launch-card">
+            <div className="launch-content">
+              <div className="eyebrow">
+                <span />
+                CENTEROS
+              </div>
+              <h2>{t.launch}</h2>
+              <p>
+                {language === "ar"
+                  ? "نحن نعمل على تقديم تجربة أفضل لإدارة مراكز الكورسات."
+                  : language === "tr"
+                  ? "Kurs merkezleri için daha iyi bir yönetim deneyimi hazırlıyoruz."
+                  : "We are preparing a better management experience for course centers."}
+              </p>
+            </div>
+
+            <Countdown t={t} />
+          </div>
+        </section>
+
+        <section className="contact-section section" id="contact">
+          <div className="contact-card">
+            <div className="contact-copy">
+              <div className="eyebrow">
+                <span />
+                CONTACT
+              </div>
+
+              <h2>{t.bookTitle}</h2>
+              <p>{t.bookText}</p>
+
+              <div className="contact-email">
+                <small>Email</small>
+                <a href="mailto:centeros@centeros.online">
+                  centeros@centeros.online
+                </a>
+              </div>
+            </div>
+
+            <form className="booking-form" onSubmit={submitBooking}>
+              <div className="form-row">
+                <label>
+                  <span>{t.managerName}</span>
+                  <input
+                    required
+                    value={form.managerName}
+                    onChange={(e) =>
+                      updateForm("managerName", e.target.value)
+                    }
+                  />
+                </label>
+
+                <label>
+                  <span>{t.centerName}</span>
+                  <input
+                    required
+                    value={form.centerName}
+                    onChange={(e) =>
+                      updateForm("centerName", e.target.value)
+                    }
+                  />
+                </label>
+              </div>
+
+              <div className="form-row">
+                <label>
+                  <span>{t.email}</span>
+                  <input
+                    required
+                    type="email"
+                    value={form.email}
+                    onChange={(e) => updateForm("email", e.target.value)}
+                  />
+                </label>
+
+                <label>
+                  <span>{t.branches}</span>
+                  <select
+                    required
+                    value={form.branches}
+                    onChange={(e) =>
+                      updateForm("branches", e.target.value)
+                    }
+                  >
+                    <option value="" disabled>
+                      —
+                    </option>
+                    <option value="1">1</option>
+                    <option value="2-3">2 - 3</option>
+                    <option value="4-5">4 - 5</option>
+                    <option value="6+">6+</option>
+                  </select>
+                </label>
+              </div>
+
+              <label>
+                <span>{t.studentsCount}</span>
+                <select
+                  required
+                  value={form.studentsCount}
+                  onChange={(e) =>
+                    updateForm("studentsCount", e.target.value)
+                  }
+                >
+                  <option value="" disabled>
+                    —
+                  </option>
+                  <option value="حتى 100 طالب">حتى 100 طالب</option>
+                  <option value="حتى 200 طالب">حتى 200 طالب</option>
+                  <option value="حتى 300 طالب">حتى 300 طالب</option>
+                  <option value="حتى 400 طالب">حتى 400 طالب</option>
+                  <option value="حتى 500 طالب">حتى 500 طالب</option>
+                  <option value="أكثر من 500 طالب">
+                    أكثر من 500 طالب
+                  </option>
+                </select>
+              </label>
+
+              <label>
+                <span>{t.additionalInfo}</span>
+                <textarea
+                  rows="4"
+                  value={form.additionalInfo}
+                  onChange={(e) =>
+                    updateForm("additionalInfo", e.target.value)
+                  }
+                />
+              </label>
+
+              <button className="submit-button" disabled={sending}>
+                {sending ? t.sending : t.sendRequest}
+                {!sending && <span>→</span>}
+              </button>
+            </form>
+          </div>
+        </section>
+      </main>
+
+      <footer className="public-footer">
+        <div className="footer-inner">
+          <div className="footer-brand">
+            <img src="/newlogo.png" alt="CenterOS" />
+            <div>
+              <strong>CenterOS</strong>
+              <p>{t.footerText}</p>
+            </div>
+          </div>
+
+          <div className="footer-links">
+            <button onClick={() => scrollTo("home")}>{t.navHome}</button>
+            <button onClick={() => scrollTo("features")}>
+              {t.navFeatures}
+            </button>
+            <button onClick={() => scrollTo("packages")}>
+              {t.navPackages}
+            </button>
+            <button onClick={() => scrollTo("contact")}>
+              {t.navContact}
+            </button>
+          </div>
+
+          <div className="footer-copy">
+            © {new Date().getFullYear()} CenterOS. All rights reserved.
+          </div>
+        </div>
+      </footer>
+
+      {success && (
+        <div className="success-overlay">
+          <div className="success-modal">
+            <button
+              className="modal-close"
+              onClick={() => setSuccess(false)}
+            >
+              ×
+            </button>
+
+            <div className="success-check">✓</div>
+            <h3>{t.success}</h3>
+            <p>{t.successText}</p>
+
+            <a
+              className="whatsapp-button"
+              href="https://wa.me/201109330703"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {t.whatsapp}
+            </a>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
