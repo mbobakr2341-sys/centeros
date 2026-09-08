@@ -1,4 +1,5 @@
 import LoginPage from "./Login";
+import DashboardPage from "./dashboard/Dashboard";
 import PublicSite from "./PublicSite";
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
@@ -1445,6 +1446,7 @@ function InternalApp() {
 
 
 function PublicEntryPoint() {
+  if (window.location.pathname === "/dashboard") return <DashboardPage />;
   if (window.location.pathname === "/login") {
     return <LoginPage />;
   }
