@@ -523,7 +523,7 @@ function PublicSite() {
 
                     <div className="price">
                       <strong>{plan.price[billing]}</strong>
-                      <span> EGP / {billing === "yearly" ? t.year : t.month}</span>
+                      <span> $ / {billing === "yearly" ? t.year : t.month}</span>
                     </div>
 
                     <div className="pricing-divider" />
